@@ -1,11 +1,19 @@
 Options +ExecCGI 
- AddHandler cgi-script .cgi 
- AddHandler cgi-script .pl 
-#検索エンジンの旧ページURLにアクセスした人はWordpressのルートへリダイレクト
-ErrorDocument 404 /wp/
+AddHandler cgi-script .cgi 
+AddHandler cgi-script .pl 
 <IfModule mod_rewrite.c>
 RewriteEngine on
 RewriteBase /
+
+# --- Bot 対策（安全で副作用が少ないもの） ---
+
+# HTTP/1.0 を拒否
+RewriteCond %{SERVER_PROTOCOL} ^HTTP/1\.0$
+RewriteCond %{HTTP_USER_AGENT} ^$
+RewriteRule .* - [F]
+
+# --- Bot 対策ここまで ---
+
 # Redirect from "http://" to "https://"
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
