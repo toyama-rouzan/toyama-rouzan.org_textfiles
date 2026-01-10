@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=SHIFT_JIS">
+<META name="GENERATOR" content="IBM WebSphere Studio Homepage Builder Version 9.0.0.0 for Windows">
+<META http-equiv="Content-Style-Type" content="text/css">
+<TITLE></TITLE>
+</HEAD>
+<BODY>
+<P><FONT size="+1"><B>パスワードに関する注意事項<BR>
+</B></FONT></P>
+<P>会員専用ページメニューにおいて、末尾に<FONT color="#ff0000">公</FONT>があるものは会員外の方も閲覧する必要から公開エリアに設置してありますが、専用エリア設置に比べセキュリティーはかなり低くなっています。<BR>
+<BR>
+２０１４年1月31日現在すべて01２３としていますが、もし不正投稿などがありましたら、<FONT color="#ff0000">公</FONT>文字のあるものだけでも複雑なパスワードに変更してください。<BR>
+<BR>
+<B>パスワード変更の方法</B><BR>
+　cgi-designのもの（スケジュール、写真受け渡しアルバム、表紙スライド写真管理、お知らせ書き込み、公開版お知らせ書き込み）は管理画面で簡単に変更出来ます。もちろん混乱を防ぐためパスワード変更は合意の上お願いします（基本的に担当者）。<BR>
+<BR>
+　KENTWEBのもの（会員専用掲示板、資料保管閲覧用掲示板、PDF版会報たんぽぽ保管庫）はint.cgi の中に書いてあるパスワードを書き換える必要がありホームページ管理担当者のみの対応となります。<BR>
+<BR>　なお、お問い合わせフォームメールは公開エリアですがパスワード設定がありませんが画像認証方式を採用していて自動的に大量投稿するスパムメールにはセキュリティーがあります。悪意の投稿者に対しては受け取る側のGmailで迷惑メールとしてフィルターを掛けることである程度対策は取れます。</P>
+</BODY>
+</HTML>

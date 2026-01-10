@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=shift_jis">
+<meta http-equiv="content-style-type" content="text/css">
+<link href="style.css" rel="stylesheet" type="text/css">
+<title>ファイル削除フォーム</title>
+</head>
+<body>
+
+<div class="ta-r">
+	<input type="button" value="&lt; 戻る" onclick=window.open("!upload_cgi!","_self")>
+</div>
+
+<div class="ttl">■ 削除フォーム</div>
+
+<ul>
+<li>下記ファイルを削除します。「削除キー」を入力してください。
+
+<form action="!upload_cgi!" method="post">
+<input type="hidden" name="del" value="!num!">
+<input type="hidden" name="delkey" value="1">
+<table class="del-tbl">
+<tr>
+	<th>ファイル</th>
+	<td><b>!fname!</b></td>
+</tr><tr>
+	<th>登録日時</th>
+	<td>!date!</td>
+</tr><tr>
+	<th>コメント</th>
+	<td>!comment!</td>
+</tr><tr>
+	<th>削除キー</th>
+	<td><input type="password" name="key" size="15"></td>
+</tr>
+</table>
+<input type="submit" value="送信する">
+</form>
+</ul>
+</body>
+</html>

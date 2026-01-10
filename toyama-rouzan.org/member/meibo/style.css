@@ -1,0 +1,59 @@
+/* ------------------------------------------------------------------------------------ */
+/* デザイン設定は、このファイルでほとんど行えます。					*/
+/* 基本的に、色設定は#369(=#336699)のようになっている部分を書き換えればOK		*/
+/* 左寄せ、中央寄せについては、leftやcenterを書き換えればOK				*/
+/* ↑に従えば、スタイルシートが分からない方でも、色変更は簡単にできると思います。	*/
+/* それ以外の細かい記述については…スタイルシートの解説ページを参照してください(汗;	*/
+/* ------------------------------------------------------------------------------------ */
+
+/* フォントサイズと行間の設定 */
+body,tr,td,th { font-size: 11pt; }
+
+/* <BODY>タグの設定 */
+body {
+background-color:#FAFAF5;		/* 背景色の設定。背景画像はlist.cgi中で設定してください */
+color:#666; 				/* 基本の色設定 */
+
+/* スクロールバーの設定。デフォルトがいいなら、以下8行を削除( }は消しちゃダメ) */
+scrollbar-base-color : #CEF;
+scrollbar-face-color : #CEF;
+scrollbar-arrow-color : #FFF;
+scrollbar-3dlight-color: #69F;
+scrollbar-highlight-color : #BCF;
+scrollbar-shadow-color : #BCF;
+scrollbar-darkshadow-color : #69F;
+scrollbar-track-color : #E9F3FF;
+}
+
+/* リンクの設定 */
+a:link { text-decoration:none; color:#66F; }		/* 未クリックのリンク設定 */
+a:visited { text-decoration:none; color:#66F; }		/* クリック済みのリンク設定 */
+a:active { text-decoration:none; }			/* クリックされた瞬間のリンク設定 */
+a:hover { color:#DD0000 }				/* マウスが乗っている状態のリンク設定 */
+
+/* フォームの色設定 */
+textarea,input,select{ background-color : #FFF9F0 ; font-size:10pt; }
+
+
+/* トップページのデザイン設定 */
+.title { font-size : 16pt; color:#69F; font-weight:bold; text-align : center; }		/* タイトルの設定(文字サイズ,文字色,太字にするか,文字寄せ) */
+.table2 { border-style: none; }								/* テーブルの枠線を表示したい場合は、この行を削除 */
+.tr1 { color:#E6E6FF; background-color:#7777FF; font-weight:bold; text-align:center; }	/* テーブル見出し部分の文字色、背景色、太字にするかどうか */
+.tr2 { background-color:#e0e6ff; text-align:center; }					/* テーブルの本体部分の背景色、およびセンタリングするかの設定 */
+.tr3 { background-color:#f0f6ff; text-align:center; }					/* 本体部分は、↑とこの色で縞模様になります。それが嫌なら上と同じ色に */
+.new { color:#F63; }									/* 新着記事の日付部分を、どんな色に変えるか */
+small{ font-size : 10pt; }								/* 日付の大きさ(これだけ小さくしている) */
+
+/* 詳細表示ページのデザイン設定 */
+.name { font-size : 12pt; color:#F9F9FF; background-color:#9999FF; font-weight:bold; text-align:center; }	/* 名前部分の設定（サイズ,文字色,背景色,太字にするかどうか,文字寄せ） */
+.left { text-align:right; background-color:#C0D0FF; width: 200; }						/* 項目を表示する部分（文字寄せ,背景色,幅） */
+.right { text-align:left; background-color:#D0E0FF; width: 400; }						/* 内容を表示する部分（文字寄せ,背景色,幅） */
+.com1 { text-align:left; color:#EEEEFF; background-color:#8888FF; font-weight:bold; }				/* コメント見出し部分（文字寄せ,文字色,背景色,太字にするか） */
+.com2 { text-align:center; background-color:#EEEEEE; width: 610; }						/* コメントの本体部分（文字寄せ,背景色,幅） */
+
+
+/* その他のページの設定 */
+.midashi { font-size : 11pt; color:#FDFDFF; background-color:#339966; font-weight:bold; text-align:center; }	/* タイトル部分（サイズ,文字色,背景色,太字にするかどうか,文字寄せ） */
+.bold { color:#7777FF; font-weight:bold; }									/* 強調させる部分部分（文字色,太字にするかどうか） */
+.check{ font-size : 10pt; color:#FF6666; }									/* 入力必須項目につける「*」印の書式設定 */
+.mail { text-align:right; color:#F9F9FF; background-color:#8899FF; font-weight:bold; }				/* メール送信フォームでの見出し（[名前]など）設定（文字寄せ,文字色,背景色,） */

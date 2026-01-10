@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head>
+<META http-equiv="content-type" content="text/html; charset=SHIFT_JIS">
+<meta http-equiv="content-script-type" content="text/javascript">
+<META http-equiv="content-style-type" content="text/css">
+<META name="GENERATOR" content="IBM WebSphere Studio Homepage Builder Version 9.0.0.0 for Windows">
+<link href="style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+<!--
+function popup(url) {
+	window.open(url, "notice", "width=550,height=350,scrollbars=1");
+}
+// -->
+</script>
+<title>!bbs_title!</title>
+</head>
+<body>
+
+!counter!
+
+<div class="ta-c">
+<h1>!bbs_title!</h1>
+
+<hr width="90%">
+[<a href="!homepage!" target="_top">トップに戻る</a>]
+[スレッド表示]
+[<a href="!bbs_cgi!?bbs=1">トピック表示</a>]
+[<a href="!bbs_cgi!?mode=album">アルバム</a>]
+[<a href="!bbs_cgi!?mode=note" target="notice" onclick="popup('!bbs_cgi!?mode=note')">留意事項</a>]
+[<a href="!bbs_cgi!?mode=find">ワード検索</a>]
+<!-- past -->
+[<a href="!bbs_cgi!?mode=past">過去ログ</a>]
+<!-- past -->
+[<a href="!admin_cgi!">管理用</a>]
+<hr width="90%">
+
+</div>
+
+<blockquote>
+<form action="!regist_cgi!" method="post" enctype="multipart/form-data">
+<input type="hidden" name="mode" value="regist">
+<input type="hidden" name="reno" value="!reno!">
+<input type="hidden" name="bbs" value="!bbs!">
+<TABLE class="regfm" width="546">
+<tr>
+	<th>おなまえ</th>
+	<td><input type="text" name="name" size="28" value="!name!" maxlength="15"></td>
+</tr><tr>
+	<th>Ｅメール</th>
+	<td><input type="text" name="email" size="28" value="!email!"></td>
+</tr><tr>
+	<th>タイトル</th>
+	<td nowrap>
+		<input type="text" name="sub" size="36" value="!sub!">
+		<input type="submit" value="投稿する"><input type="reset" value="リセット">
+	</td>
+</tr><tr>
+	<th colspan="2">
+		コメント<br>
+    	<TEXTAREA cols="77" rows="4" name="comment"></TEXTAREA>
+	</th>
+</tr><tr>
+	<th>参照URL</th>
+	<td><input type="text" size="50" name="url" value="!url!"></td>
+</tr><tr>
+	<th>添付File</th>
+	<td><input type="file" name="upfile" size="40"></td>
+</tr><tr>
+	<th>暗証キー</th>
+	<td class="small">
+		<input type="password" name="pwd" size="8" maxlength="8">
+		(英数字で8文字以内)
+	</td>
+
+<!-- captcha -->
+</tr><tr>
+	<th>画像認証</th>
+	<td class="small">
+		<input type="text" name="captcha" size="8" style="ime-mode:inactive" value="" maxlength="8">
+		（右画像の数字を入力） <img src="!captcha_cgi!?!str_crypt!" class="capt" alt="投稿キー">
+		<input type="hidden" name="str_crypt" value="!str_crypt!">
+	</td>
+<!-- captcha -->
+
+</tr><tr>
+	<th>文字色</th>
+	<td>!color!</td>
+</tr>
+</TABLE>
+</form>
+</blockquote>
+
+<div class="ta-c">
+
+<div class="page-btn">!page_btn!</div>
+
+<!-- loop -->
+<div class="art">
+<strong>!sub!</strong> 投稿者：<b>!name!</b> 投稿日：!date! !url! <span class="num">No.!num!</span>
+	<input type="button" value="返信" onclick="window.open('!bbs_cgi!?res=!num!','_self')">
+	<p>!comment!</p>
+	<!-- res -->
+</div>
+<!-- loop -->
+
+<div class="page-btn">!page_btn!</div>
+
+<form action="!regist_cgi!" method="post">
+処理 <select name="mode">
+<option value="log_edit">修正
+<option value="log_dele">削除
+</select>
+記事No <input type="text" name="no" size="3" style="ime-mode:inactive">
+暗証キー <input type="password" name="pwd" size="4" maxlength="8">
+<input type="submit" value="送信">
+</form>
+</div>
+
+</body>
+</html>

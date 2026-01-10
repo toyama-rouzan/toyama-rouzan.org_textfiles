@@ -1,0 +1,225 @@
+@charset "shift_jis";
+
+body,td,th {
+	font-size: 80%;
+	background: #ffffff;
+}
+a {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+	color: #dd0000;
+}
+
+/* 掲示板タイトル */
+h1 {
+	font-size: 200%;
+	margin-bottom: 0;
+	color: #400000;
+}
+/* 削除キー入力フォーム部の文字サイズ */
+td.small {
+	font-size: 70%;
+}
+/* メイン記事装飾 */
+div.art {
+	width: 92%;
+	background: #fff;
+	text-align: left;
+	padding: 0.7em 0.7em 0.7em 1em;
+	border: 1px solid gray;
+	margin: 1.2em auto;
+}
+/* メイン記事タイトル */
+div.art strong {
+	color: #008000;
+}
+/* メイン記事番号色 */
+span.num {
+	color: #008000;
+}
+/* 投稿フォーム */
+table.regfm td, table.regfm th {
+	padding: 0.1em;
+	white-space: nowrap;
+	text-align: left;
+}
+img.capt {
+	vertical-align: middle;
+}
+div.obi {
+	text-align: center;
+	padding: 2px;
+	background: #400000;
+	color: #fff;
+	font-weight: bold;
+}
+div.note {
+	width: 97%;
+	background: #fff;
+	border: 1px solid gray;
+	margin: 1em;
+	padding: 6px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+}
+p.close {
+	text-align: center;
+	margin-top: 3em;
+}
+p.close input {
+	width: 80px;
+}
+p.red {
+	color: #dd0000;
+}
+div.key {
+	float: left;
+	width: 3.5em;
+}
+div.val {
+	float: left;
+}
+td.oldlog {
+	background: #fff;
+}
+div.val strong {
+	color: #008000;
+}
+
+/* 写真枠デザイン設定 */
+div.photo {
+	border: 1px solid #2b0000;
+	background: #4c4c4c;
+	color: #fff;
+	width: 270px;
+	height: 200px;
+	float: left;
+	margin: 12px 5px;
+}
+/* 写真およびキャプション位置 */
+p.image, p.caption {
+	text-align: center;
+	margin: 10px;
+}
+/* 画像廻り込み終了 */
+.clear {
+	clear: both;
+}
+
+/* アイコン位置 */
+img.icon {
+	vertical-align: middle;
+	border: none;
+	margin: 0 2px;
+}
+div.ttl {
+	font-weight: bold;
+	color: #572c00;
+	border-bottom: 1px solid #572c00;
+	padding: 2px;
+}
+
+/* 汎用画面寄せ */
+.ta-r {
+	text-align: right;
+}
+.ta-c {
+	text-align: center;
+}
+
+/* 返信記事 */
+div.reslog {
+	margin: 0 0 0 auto;
+	width: 92%;
+	text-align: left;
+	border-top: 1px dashed gray;
+	padding: 6px;
+}
+div.rescom {
+	margin-top: 5px;
+}
+
+/* トピック画面 */
+table.topic {
+	border-collapse: collapse;
+	width: 90%;
+	margin: 5px auto 1em auto;
+}
+table.topic th {
+	border: 1px solid #552b00;
+	padding: 4px;
+	background: #ffdab5;
+}
+table.topic td {
+	border: 1px solid #552b00;
+	padding: 4px;
+	background: #fff;
+}
+.w-s {
+	width: 3.5em;
+}
+.w-m {
+	width: 12em;
+}
+
+/* 投稿・返信ボタン */
+div.new-btn {
+	width: 90%;
+	text-align: left;
+	margin: 6px auto;
+}
+div#addform {
+	width: 90%;
+	text-align: left;
+	margin: 0 auto;
+}
+div.res-btn {
+	width: 92%;
+	text-align: left;
+	margin: 1em auto;
+}
+div.find-form {
+	width: 90%;
+	text-align: left;
+	margin: 0 auto;
+}
+
+/*
+	ページ送り
+	参考: http://css-happylife.com/template/page_nav/
+*/
+ul.pager {
+	margin: 0 0 10px;
+	padding: 10px 10px 5px;
+}
+ul.pager li {
+	display: inline;
+	margin: 0 2px;
+	padding: 0;
+}
+ul.pager li span {
+	display: inline-block;
+	margin-bottom: 5px;
+	padding: 5px 12px;
+	background: #804040;
+	color: #fff;
+	border: 1px solid #aaa;
+	text-decoration: none;
+	vertical-align: middle;
+}
+ul.pager li a {
+	display: inline-block;
+	margin-bottom: 5px;
+	padding: 5px 12px;
+	background: #fff;
+	color: #5b2e00;
+	border: 1px solid #804040;
+	text-decoration: none;
+	vertical-align: middle;
+}
+ul.pager li a:hover {
+	background: #ffc488;
+}

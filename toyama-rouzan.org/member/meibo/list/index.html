@@ -1,0 +1,43 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<link rel=stylesheet type=text/css href="./style.css">
+<title>年会費納入状況</title>
+</head>
+<body>
+<div align="center">
+<div class=title>年会費納入状況</div>
+<hr width=30%>
+[<A HREF="./list.cgi?mode=find">検索</A>]　[<A HREF="../index.html">戻る</A>]
+<BR><hr width=30%>
+<table><tr><td><small>
+■ 名前をクリックすると、詳細が表示されます。<BR>
+■ 24時間以内に追加・更新された名前は、日付が<span class=new>色つき</span>で表示されます
+</small>
+</td></tr></table>
+<form action="./list.cgi" method="POST">
+<select name="sort">
+<option value=1 selected>No.順
+<option value=2 selected>氏名
+<option value=5>最終更新日順
+<option value=20>ニックネーム
+<option value=21>納入状況
+<option value=22>納入日
+</select>
+<input type=checkbox name=rev value=1><small>逆順表示</small>
+<input type="submit" value="ソート実行">
+</form></div>
+<table class="table2" cellpadding=2 align="center">
+<tr class="tr1"><td width=40>No.</td><td width=150>氏名</td><td width="200">ニックネーム<td width="80">納入状況<td width="80">納入日</tr>
+<tr class="tr3"><td>1</td><td width=150><a href="./list.cgi?id=1&mode=show">あああああ</a></td><td width="200">アアアア</td><td width="80">－</td><td width="80">2019/01/21</td></tr>
+</table>
+<DIV ALIGN="right">
+<form action="./list.cgi" method="POST">
+<input type=hidden name=mode value="admin">
+Pass：<input type=password name=mpass size=8 maxlength=8>
+<INPUT type="submit" value="Admin">
+</DIV>
+</FORM>
+<DIV ALIGN="RIGHT"><SMALL><A HREF="http://minicgi.net/" target="_top">Miniりすと v4.01</A></SMALL></DIV>
+</body>
+</html>

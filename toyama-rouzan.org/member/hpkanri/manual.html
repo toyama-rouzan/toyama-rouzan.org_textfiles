@@ -1,0 +1,741 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=SHIFT_JIS">
+<META name="GENERATOR" content="IBM WebSphere Studio Homepage Builder Version 9.0.0.0 for Windows">
+<META http-equiv="Content-Style-Type" content="text/css">
+<title>ホームページ管理マニュアル</title>
+</head>
+<body>
+<p align="center">
+
+<CENTER>
+<TABLE bordercolor="#ce0a00" cellpadding="0" width="50%" bgcolor="#ffffff" border="1">
+  
+    <tr>
+      <td>　<font color="#004080" size="5" face="ＭＳ 明朝">ホームページ管理マニュアル</font></td>
+    </tr>
+    <TR>
+      <TD bgcolor="#c1e0ff">　目次</TD>
+    </TR>
+    <TR>
+      <TD><FONT face="HGPｺﾞｼｯｸE">　</FONT><FONT face="ＭＳ Ｐ明朝"><A href="#hajime">はじめに</A><BR>
+      　　　　<A href="#jyunbi1">準備１</A><BR>
+      　　　　　　　無料ホームページ作成ソフト　alphaEDIT　をインストール。<BR>
+      　　　　<A href="#jyunibi2">準備２</A><BR>
+      　　　　　　　無料FTPソフト　FFFTP　をインストール。<BR>
+      <BR>
+      　<A href="#1">１、サーバーに接続</A><BR>
+      <BR>
+      　<A href="#2">２、バックアップをとる。</A><BR>
+      <BR>
+      　<A href="#3">３、alphaEDITでトップページを開いてみる</A><BR>
+      <BR>
+      　<A href="#4">４、ページの構造を知る　</A>　<BR>
+      <BR>
+      　<A href="#5">５、ページを新しく作成または修正しアップロードする</A><BR>
+      <BR>
+      　<A href="#6">６、CGIについて</A><BR>
+      <BR>
+      　<A href="#7">７、CGIのパーミッションについて</A><BR>
+      <BR>
+      　<A href="#8">８、とりあえず無料サーバーなどで練習してみましょう</A><BR>
+      <BR>
+      　<A href="#9">９、複数のパソコンで管理する場合の注意点</A><BR>
+      <BR>
+      </FONT></TD>
+    </TR>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0031"><strong>　</strong><font face="ＭＳ 明朝"><A name="hajime">はじめに</A></font></TD>
+    </tr>
+    <tr>
+      <TD bgcolor="#ffffff" bordercolor="#de0084">　<font face="ＭＳ 明朝">山岳会は入退会も頻繁にあり担当者が退会したあとでホームページが休止状態という事はよくあるケースです。</font><font face="ＭＳ 明朝">このマニュアルはそんな事態にならないように、少しパソコンの知識があれば管理できるマニュアルの必要性を感じ作成したものです。<br>
+      </font><font face="ＭＳ 明朝">　とはいえ私自身パソコンの専門家でもなく、ましてやホームページ制作などを生業としてきたわけではありません。そんなことから自分の我流的な内容が含まれている可能性は大きく、また、富山労山のホームページの内容も徐々に変更されていくと思いますので、管理を引き継がれた方でお気づきの点があれば、ホームページ管理が継続可能なマニュアルに少しでも近づくよう改良されることを是非お願いします。<br>
+      <br>
+      　2014年1月～2月にかけてのホームページ改良は、特別なスキルが無くても通常の情報修正程度のホームページ変更は誰でも出来るような仕組みにすることで、ホームページの継続的管理を担保し、これによりホームページ担当者の負担を減らす事を主目的と考え作業を行いました。<br>
+      <br>
+      具体的には<br>
+      １、山行報告は表紙のリンクをその都度ホームページ担当者が作成していたが、山行報告ブログの一部を表示させることでブログ投稿が自動的に反映される様にした。<br>
+      ２、案内など対外的なお知らせを設置し、誰でも簡単に書き込みが出来るようにした。。<br>
+      ３、リンク集をCGIとし、誰でも簡単に変更出来る方式とした。<br>
+      ４、表紙写真はホームページ担当者が時折変更していたが、CGIを使ったスライドショー方式とし誰でも写真を追加、削除出来る方式とした。また、大量掲載によってオールラウンドである会の特徴や雰囲気が伝わりやすい表現方式となった。<br>
+      ５、連絡先として、メールアドレスを書いていたがフォームメールCGIによるものに変更した。問い合わせ種別の変更に関してはホームページ担当者のみ変更可能である。<br>
+      ６、会員専用ページを新設し会員の利便を図った。内容についてはCGIを多用することで通常はホームページ担当者が介在する必要はない。<br>
+      ７、借りているサーバースペースが１０GBと十分あるので、使用CGIは従前のレンタル掲示板などから自前サーバーに設置することとした。これによりＣＭ等も排除できたし、掲示板以外の多様な機能を実現出来た。<br>
+      ８、これらの改良により、ほとんどの変更は誰でも簡単にでき、このマニュアルに記載するような作業は大きな改良や修正が無い限り必要はないかもしれない。ホームページ担当者のありそうな作業は、あったとしてもKENTWE製ののCGIのパスワード変更と問い合わせ種別変更程度で済みそうで大きな省力化を果たした。<br>
+      <br>
+      　会員専用メニューで必要と思われる項目についてはメニュー横に使い方などのリンクを作成している。各メニューの操作についてはどれも特に難しい事はないと思われるので、特にマニュアル化はしていない。<br>
+      <br>
+      　以上の様な改良で今回大幅なノンスキル化、省力化が達成されたが、このマニュアルに書いたようなホームページ管理のスキルはやはり維持しておくべきで、興味のある方は是非取り組んでいただきたいと考えます。 
+      <br>
+      なお、このマニュアルをホームページ作成、管理の学習材料とされる場合は　１、サーバーに接続　の前に　８、とりあえず無料サーバーなどで練習してみましょう　を参考にサーバーを借りて、１以降を見られるのも良い方法と思います。<br>
+      <br>
+      </font></TD>
+    </tr>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0031"><A name="jyunbi1">　<font face="ＭＳ 明朝">準備１　無料ホームページ作成ソフトを手に入れよう</font></A></TD>
+    </tr>
+    <tr>
+      <TD bgcolor="#ffffff" bordercolor="#de0084">　<font face="ＭＳ 明朝">ホームページはHTML言語で書かれています。それではまずその勉強から・・・・いえいえ、知っているに越したことはありませんが、知らなくてもやりたいことをワープロの様に画面に作るだけで、HTML言語に変換してくれる便利なソフトがあります。</font>
+      <p lang="ja-JP"><font face="ＭＳ 明朝">実際私もホームページビルダーという有料ソフトに頼っています。しかし、無料でも同じような機能を有するソフトがあります。まずこれをインストールしましょう。　　このマニュアルとあわせてご覧ください<a href="http://homepage.ojaru.jp/index.html" target="_self">フリーソフトでホームページを作ろう</a></font></p>
+      <p lang="ja-JP"><font face="ＭＳ 明朝"><br>
+      </font></p>
+      <p lang="ja-JP"><FONT face="ＭＳ 明朝">HTMLエディター　<a href="http://www.vector.co.jp/soft/win95/net/se272154.html" target="_self">alphaEDIT</a>　<br>
+      <br>
+      ここで大切なのはXPより後のwindowsをお使いの方はもう一つプログラムをインストールすることです。<br>
+      </FONT></p>
+      <TABLE cellspacing="0" cellpadding="0" width="100%" border="1">
+        
+          <tr>
+            <td bgcolor="#ececec"><FONT face="ＭＳ 明朝">　Windows 7/Vistaユーザーの方</FONT>
+            <div class="contents_area-2">
+            <p><FONT face="ＭＳ 明朝">　Windows 
+            7/VistaではalphaEDITの動作にDhtmlEdというプログラムのインストールが必要です。これはMicrosoftが配布しているプログラムで<a class="link_b" href="http://www.microsoft.com/downloads/details.aspx?familyid=b769a4b8-48ed-41a1-8095-5a086d1937cb&amp;displaylang=en" target="_self">公式ページからダウンロード</a>できます。リンク先の公式ページは英語ページになっていますが、不安な場合は当サイトの下部リンクから直接ダウンロードできます。XP以前のユーザーの方はこのプログラムのインストールは不要です。</FONT></p>
+            <div class="download"><FONT face="ＭＳ 明朝"><img border="0" alt="" src="14.gif" width="210" height="173"></FONT></div>
+            <p><FONT face="ＭＳ 明朝">　ダウンロードしたDhtmlEd.msiを実行してインストールしていきます。英文の規約が表示され、同意する場合は「I 
+            Agree」にチェック。「I 
+            Agree」にチェックするとグレイアウトしていた「Next」ボタンがクリックできるようになるので「Next」でDhtmlEdのインストールが始まります。これでWindows 
+            7/VistaでもalphaEditが使用できるようになります。</FONT></p>
+            </div>
+            </td>
+          </tr>
+        
+      </TABLE>
+      <p lang="ja-JP"><FONT face="ＭＳ 明朝"><br>
+      基本的に、このalphaEDIT上でホームページの作成をすることになります。<br>
+      新しいページを最初から作ったり、既設のページをこれに読み込んで改良したりです。<br>
+      <br>
+      操作方法は使いながら覚えてください。書けばきりがありません。<br>
+      私もこのマニュアル作成の為に、今日初めてインストールして使っていますが、Wordなどと同じ感覚だと感じていますので難しくはないと思います。<br>
+      <br>
+      また、HTML言語については必要に応じて<a href="http://www.htmq.com/" target="_self">クイックリファレンス</a>を参考にするのも良いと思います。<br>
+      <br>
+      なお、このページの枠はalphaEDITの　テーブル　から、上のクイックリファレンスのリンクは　挿入&gt;ハイパーリンクで作成しています。<br>
+      <br>
+      </FONT></p>
+      </TD>
+    </tr>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0032"><A name="jyunibi2">　<font face="ＭＳ 明朝">準備２　FTPソフトをインストール</font></A></TD>
+    </tr>
+    <tr>
+      <td>　<font face="ＭＳ 明朝">ホームページの新しいページをalphaEDITで作成出来たとして、これをホームページを入れているサーバーに転送しなければなりません。その役割を行うのがFTPソフトで、フリーソフトで<a href="http://www.vector.co.jp/soft/win95/net/se061839.html" target="_self">FFFTP</a>というのがよく使われています。<br>
+      自分もずいぶん前からこれを使っています。まず、インストールしてください。<br>
+      <br>
+      </font></td>
+    </tr>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0032">　<font face="ＭＳ 明朝"><A name="1">１　サーバーに接続</A></font></TD>
+    </tr>
+    <tr>
+      <td><font face="ＭＳ 明朝">　FTPソフト（ここではFFFTP）を立ち上げ、メニュー左上の　接続&gt;ホスト設定&gt;新規登録　で富山労山のホームページサーバを設定します（申し訳ないですが、管理担当者以外にはパスワードは公開できません）。<br>
+      <br>
+      <img border="0" alt="" src="2.gif" width="504" height="449"><br>
+      <br>
+      これで接続すると下図のようになります。<br>
+      左側はパソコン側でそれぞれのパソコンで異なります。右側がサーバー側のフォルダーが表示されています。<br>
+      ホームページのファイルはhttpdocsフォルダーに入っています。それ以外はいじらないようにしてください。<br>
+      <br>
+      <img border="0" alt="" src="3.gif" width="600" height="373"><br>
+      <br>
+      <br>
+      httpdocsフォルダーの中は下図のとおり。<br>
+      まだ下にファイルがあります。<br>
+      中にはすでに使っていないファイルもありますが、下手に削除して影響が出るという可能性もあるし、容量にもほとんど影響がないのでそのままにしています。<br>
+      <br>
+      <img border="0" alt="" src="4.gif" width="600" height="717"><br>
+      <br>
+      </font></td>
+    </tr>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0032"><font face="ＭＳ 明朝"><A name="2">　２　　バックアップを取る</A></font></TD>
+    </tr>
+    <tr>
+      <td><font face="ＭＳ 明朝">　初めて接続してまずサーバーの中身のバックアップをパソコンに作りましょう。<br>
+      パソコン側に右のサーバー側のhttpdocs内のフォルダー、ファイルをすべて選択し左へドラックしダウンロードします。<br>
+      <font color="#ff0000">または、ミラーリングダウンロードがあります。これはサーバー側に無いパソコンのファイルは削除するので注意が必要です。<br>
+      さらに、ミラーリングアップロードと間違えると、サーバー側の必要なファイルを削除する可能性もあるので、なるべくやらないほうが良いと思います。<br>
+      </font>自分の経験で、全部を選択した場合ダウンロード途中でうまくいかない事があり、個別のフォルダー単位くらいでやると割合上手く出来ました。<br>
+      下図では左のパソコン側にbacやhtmなどサーバー側に必要の無いファイルが含まれていて、全く同一にはなっていませんが、初回では全く同じ状態になるはずです。<br>
+      <br>
+      <img border="0" alt="" src="5.gif" width="600" height="604"><br>
+      </font></td>
+    </tr>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0032">　<font face="ＭＳ 明朝"><A name="3">３　alphaEDITでトップページを開いてみる</A></font></TD>
+    </tr>
+    <tr>
+      <td>　<font face="ＭＳ 明朝">トップページはhttpdocsフォルダーの　index.html 
+      です。<br>
+      そこで、パソコン側にダウンロードしたhttpdocsフォルダー内の index.html 
+      をalpahEDITで開きます。<br>
+      <br>
+      <img border="0" alt="" src="6.gif" width="600" height="404"><br>
+      <br>
+      この画面は左側のWYSIWYGでの画面で基本的にはこの画面で編集することになると思います。<br>
+      スライドショーやブログの画面、お知らせの画面は表示されていません。<br>
+      <br>
+      さらにプレビュー画面にすると<br>
+      <br>
+      <img border="0" alt="" src="8.gif" width="600" height="414"><br>
+      <br>
+      この様な画面になります。あまり変わりません。枠が消えたくらいでしょうか。この画面は実際に動く状態を表示するモードです。<br>
+      しかし、スライドショーやブログ、お知らせなどはやはり表示されません。少し難しいですが、これらはweb上で動いているので表示されないのです。<br>
+      <br>
+      ちなみに、有料のホームページビルダーというソフトのプレビュー画面は<br>
+      <br>
+      <img border="0" alt="" src="9.gif" width="600" height="481"><br>
+      <br>
+      となり、やはりお知らせは表示されていませんが、スライドショー、ブログは表示されています。このあたりは有料と無料の差と思ったのですが、<br>
+      <br>
+      alphaEDITで　<strong>表示&gt;プレビューブラウザ&gt;IE(I)とすれば</strong>上と同じ画面になりました。<br>
+      無料恐るべしです。<br>
+      <br>
+      <br>
+      HTMLソースの画面にすると次の画面になります。<br>
+      つまり、このソフトが無ければ下の画面の様なタグ（という）を長々と書き込まなければなりません。<br>
+      知識とともに労力も大変な作業となることがお分かりと思います。<br>
+      <br>
+      <img border="0" alt="" src="7.gif" width="600" height="651"><br>
+      <br>
+      これでalphaEDITの３つの画面の違いが大まかに分かったと思います。<br>
+      <br>
+      <br>
+      </font></td>
+    </tr>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0032">　<font face="ＭＳ 明朝"><A name="4">４　ページの構造を知る</A></font></TD>
+    </tr>
+    <tr>
+      <td>　<font face="ＭＳ 明朝">ホームページのメニューなどのリンク関係は動作しているホームページ上で右クリックをし、プロパティーで確認すると簡単に分かります。また、alphaEDIT　上でも右クリック&gt;プロパティーで確認できます。　<br>
+      <br>
+      一例にトップページの確認をしてみると<br>
+      <font color="#ff0000">赤枠</font>はCGI、<font color="#00ff00">緑枠</font>はインラインフレームを使っています。<br>
+      <br>
+      それ以外は普通のリンクが設定されているだけです。<br>
+      <img border="0" alt="" src="10.gif" width="600" height="656"><br>
+      <br>
+      CGIとインラインフレームは今回のホームページ改造計画でホームページ管理省力化の核技術となっています。<br>
+      インラインフレームはalphaEDITでは、挿入&gt;インラインフレームで設定できます。<br>
+      <br>
+      CGIは後述します。<br>
+      <br>
+      </font></td>
+    </tr>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0032">　<font face="ＭＳ 明朝"><A name="5">５　ページを新しく作成または修正しアップロードする</A></font></TD>
+    </tr>
+    <tr>
+      <td>　<font face="ＭＳ 明朝">さて、改造したい又は修正したいページの作成方法はこれまでで概ね分かったと思います。<br>
+      そのファイルをまずパソコン側に保存します。この場合改造の場合は前のファイルをリネームしておかないと改造ページが上手く動作しない場合もとに戻すことが出来なくなります。<br>
+      <br>
+      　次にFFFTPでアップロードし動作を確認します。レイアウトや動作に不満があればこれを何度か繰り返します。<br>
+      <br>
+      <font color="#ff0000">ここで注意すべきはパソコン側とサーバー側を同じフォルダーにしておくことです。<br>
+      特に　index.html 
+      ファイルは細心の注意でアップロードし上書きしてください。<br>
+      <br>
+      <img border="0" alt="" src="5.gif" width="600" height="604"><br>
+      <br>
+      <br>
+      ※index.html 
+      は色々なフォルダーに入っている基本的なファイルです。それゆえフォルダーを間違えてアップロードしサーバー側のファイルが上書きされると大変です。<br>
+      トップページのフォルダーに間違えて会員専用ページのindex.html　ファイルを上書きすればトップページに会員専用ページが表示されてしまいます。細心の注意を払ってアップロードしてください。</font></font></td>
+    </tr>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0032">　<font face="ＭＳ 明朝"><A name="6">６　CGIについて</A></font></TD>
+    </tr>
+    <tr>
+      <td>　<font face="ＭＳ 明朝">たとえばサーバーに写真やPDF化した会報をアップロードしようとすれば、いちいちFTPソフトを使いアップロードしなければならず、ホームページ管理者のみが作業可能となり、その負担は大きくなります。<br>
+      しかし、CGIを使うことで誰でも簡単に目的を達成することが可能となり管理者の負担は軽減されます。<br>
+      　サーバーによってはCGIの設置が出来ないものや、サーバー業者側で準備したCGIのみＯＫというものもあります。そうなるとホームページに備えたい機能が実現出来ないという事も起こりえますが、幸い富山労山が借りている　</font><a href="http://www.tsukaeru.net/share/" target="_self"><font face="ＭＳ 明朝">使えるネットの共用サーバー</font></a><font face="ＭＳ 明朝">　はCGIを問題なく設置できます。CGIさえ入手できればよいわけです。<br>
+      <br>
+      無料のＣＧＩはネット上でたくさんありますが、富山労山ＨＰ上では現時点（14年2月4日）で<a href="http://www.kent-web.com/" target="_self">KENTWEB</a>と<a href="http://cgi-design.net/" target="_self">cgi-design</a>の物を利用しています。設置の方法や機能はそれらのHPで確認してください。<br>
+      <br>
+      なお、CGI設置はホームページ作成備忘録にも詳しく書きましたのでそれを下にも掲載します。</font></td>
+    </tr>
+    <tr>
+      <TD bgcolor="#e9e9e9" bordercolor="#d00100"><font face="ＭＳ 明朝"><span lang="ja-JP">ホーム作成備忘録より<br>
+      　会員専用コーナー</span>CGI<span lang="ja-JP">設置について</span></font><font face="ＭＳ 明朝">使えるネットは初期設定では掲示板などのＣＧＩを設置しようとすると、専用のフォルダー（お</font><font face="ＭＳ 明朝"><span lang="ja-JP">そらく</span>cgi-bin<span lang="ja-JP">）でなければ動かない。これだとアクセス制限を掛ける会員専用には使えない。</span></font><font face="ＭＳ 明朝">そこでネットで調べ下記の方法により他のフォルダーでも自由に設置できるようにした。</font>
+      <p lang="ja-JP"><font face="ＭＳ 明朝">1)<span lang="ja-JP">ホームページのルートフォルダーである</span>httpdocs<span lang="ja-JP">の</span>.htaccess <span lang="ja-JP">ファイルに以下の３行を書き込んだ。<br>
+      </span></font><font color="#ff0000" face="ＭＳ 明朝">Options +ExecCGI <br>
+      AddHandler cgi-script .cgi 
+      　　　　　　　この3行の記述は絶対に変えないでください。すべてのCGIが動かなくなります。 <br>
+      AddHandler cgi-script 
+      .pl <br>
+      <br>
+      </font></p>
+      <TABLE style="HEIGHT: 22px; WIDTH: 753px" cellspacing="0" cellpadding="0" border="1">
+        
+          <tr>
+            <TD bgcolor="#ffffff" bordercolor="#de0002"><font color="#ff0000" face="ＭＳ 明朝">　※.htaccess&nbsp; 
+            はサーバーの設定ファイルで不用意に書き換えると動作がおかしくなるので、書き換える時は必ずバックアップを取ったうえでお願いします。<br>
+            .htpasswd 
+            はIDとパスワードの設定ファイルで定義されていればそのフォルダー以下は認証エリアになります。</font></TD>
+          </tr>
+        
+      </TABLE>
+      <p lang="ja-JP"><font color="#ff0000" face="ＭＳ 明朝"><br>
+      </font><font face="ＭＳ 明朝">2）作成された［.htaccess］のパーミッションが［644］であることを確認する。 <br>
+      </font><font face="ＭＳ 明朝">3）上位ディレクトリにデフォルトで設置されている［cgi-bin］はそのまま残しておく。 　 
+      <br>
+      </font><font face="ＭＳ 明朝">ちなみに、CGIで使用するPerlのパスは、<br>
+      #!/usr/bin/perl</font></p>
+      <div id="セクション1" dir="ltr">
+      <p><font face="ＭＳ 明朝">sendmailのパスは、<br>
+      /usr/sbin/sendmail<br>
+      <br>
+      </font></p>
+      <TABLE style="HEIGHT: 22px; WIDTH: 747px" cellspacing="0" cellpadding="0" bgcolor="#ffffff" border="1">
+        
+          <tr>
+            <td><font face="ＭＳ 明朝">　※Perlパス、sendmailパスは使用サーバーに合わせる必要があります。上記が富山労山の使えるネットサーバーのパスです。</font></td>
+          </tr>
+        
+      </TABLE>
+      <p><font face="ＭＳ 明朝"><br>
+      <br>
+      </font><font face="ＭＳ 明朝"><span lang="ja-JP">以上で専用フォルダーでなくても</span>CGI<span lang="ja-JP">が動くようになった。</span></font></p>
+      <p><font face="ＭＳ 明朝">※<span lang="ja-JP">　</span>cgi<span lang="ja-JP">のソースやテキストファイルなどの編集はメモ帳だとうまくいかないケースもあるとの指摘がネット上であるので出来ればエディターソフトを使った方が良いと思われる。</span></font></p>
+      <p><font face="ＭＳ 明朝"><span lang="ja-JP">エディターとしては、フリーソフトの<a href="http://www.forest.impress.co.jp/library/software/terapad/" target="_self">TeraPad</a></span><span lang="ja-JP">　</span></font><font face="ＭＳ 明朝">が良く使用されている。<br>
+      <br>
+      </font><font face="ＭＳ 明朝"><strong><span lang="ja-JP">各</span>CGI<span lang="ja-JP">について</span></strong></font></p>
+      </div>
+      <p><font face="ＭＳ 明朝"><span lang="ja-JP">１）情報交換</span>CGI<br>
+      </font><font color="#000080" face="ＭＳ 明朝"><span lang="zxx"><u><a href="http://www.kent-web.com/bbs/joyful.html" target="_self">http://www.kent-web.com/bbs/joyful.html</a></u></span></font><span lang="ja-JP"><font face="ＭＳ 明朝">　　を設置。</font></span></p>
+      <p lang="ja-JP"><font face="ＭＳ 明朝">2)<span lang="ja-JP">資料保管、閲覧掲示板</span></font><font face="ＭＳ 明朝"><br>
+      </font><font color="#000080" face="ＭＳ 明朝"><span lang="zxx"><u><a href="http://www.kent-web.com/bbs/topics.html" target="_self">http://www.kent-web.com/bbs/topics.html</a></u></span></font><span lang="ja-JP"><font face="ＭＳ 明朝">　　を設置。</font></span></p>
+      <p lang="ja-JP"><font face="ＭＳ 明朝">3)PDF<span lang="ja-JP">版たんぽぽ保管庫<br>
+      </span></font><font color="#000080" face="ＭＳ 明朝"><span lang="zxx"><u><a href="http://www.kent-web.com/data/upload.html" target="_self">http://www.kent-web.com/data/upload.html</a></u></span></font><span lang="ja-JP"><font face="ＭＳ 明朝">　　を設置。</font></span></p>
+      <p lang="ja-JP"><font face="ＭＳ 明朝"><span lang="ja-JP"><b>専用コーナー認証</b></span><span lang="ja-JP">について<br>
+      </span></font><font face="ＭＳ 明朝">1)<span lang="ja-JP">ｍｅｍｂａｒフォルダーを新たに作り、ＢＡＳＩＣ認証が必要なエリアとした。<br>
+      </span></font><font face="ＭＳ 明朝">2)<span lang="ja-JP">その為に</span>member<span lang="ja-JP">フォルダーに　</span>.htaccess <span lang="ja-JP">及び</span>.htpasswd 
+      <span lang="ja-JP">に必要事項を書き込んだ。</span></font></p>
+      <p lang="ja-JP"><font face="ＭＳ 明朝">ID:<span lang="ja-JP">パスワードの生成は便利なサイトがたくさんある。</span><font color="#000080"><span lang="zxx"><u><a href="http://www.luft.co.jp/cgi/htpasswd.php" target="_self">http://www.luft.co.jp/cgi/htpasswd.php</a></u></span></font></font><font face="ＭＳ 明朝"><span lang="ja-JP"><br>
+      変更したいときはこれらを利用して生成し、上記</span>2)<span lang="ja-JP">のファイルに書き込めばよい。<br>
+      <br>
+      </span></font></p>
+      <TABLE cellspacing="0" cellpadding="0" width="75%" bgcolor="#ffffff" border="1">
+        
+          <tr>
+            <td><font face="ＭＳ 明朝"><span lang="ja-JP">　※パスワードは暗号化され.htpasswd　に定義します。専用ページへのパスワードは現在tsurugi2999 
+            ですが、これをそのまま書き込むわけではありません。</span></font></td>
+          </tr>
+        
+      </TABLE>
+      <p lang="ja-JP"><font face="ＭＳ 明朝"><span lang="ja-JP"><br>
+      </span></font><font face="ＭＳ 明朝">3)<span lang="ja-JP">時として</span>CGI<span lang="ja-JP">にフルパスを書き込む必要がある。</span>member<span lang="ja-JP">　フォルダーに</span>path.cgi <span lang="ja-JP">を入れているのでこれを起動すると</span>membar<span lang="ja-JP">までのフルパスを表示する。<br>
+      </span></font><font face="ＭＳ 明朝"><span lang="ja-JP">ちなみに</span>membar<span lang="ja-JP">までのフルパスは　<br>
+      </span></font><font face="ＭＳ 明朝"><tt class="western"><font color="#0000a0"><font size="4">/</font></font></tt><tt class="western"><font color="#0000a0"><font size="4">var/www/vhosts/toyama-rouzan.org/httpdocs/member<br>
+      </font></font></tt></font><font face="ＭＳ 明朝">4)<span lang="ja-JP">２０１４年１月２２日現在の</span>member<span lang="ja-JP">フォルダーは次ページのとおり。<br>
+      <br>
+      </span></font></p>
+      <TABLE style="HEIGHT: 22px; WIDTH: 714px" cellspacing="0" cellpadding="0" bgcolor="#ffffff" border="1">
+        
+          <tr>
+            <td><font face="ＭＳ 明朝"><span lang="ja-JP">　※http://　で始まるパスはURLパス。フルパスという場合サーバーのルート（一番根本）からのパスです。契約サーバーの説明に書いてあると思いますが、そのあたりの資料が分からないのでCGIを使い確認しました。<br>
+            　今後フルパスを設定するCGIがある時は上記のパスを参考に記入してください。</span></font></td>
+          </tr>
+        
+      </TABLE>
+      <p lang="ja-JP"><font face="ＭＳ 明朝"><span lang="ja-JP">写真アルバム内の</span>cgi<span lang="ja-JP">を使用して、</span><span lang="ja-JP"><b>表紙スライドショーを</b></span><b>CGI</b><span lang="ja-JP"><b>に変更</b></span><span lang="ja-JP">しました。<br>
+      </span></font><font face="ＭＳ 明朝">CGI<span lang="ja-JP">は<a href="http://cgi-design.net/prog/view/view47/index.htm" target="_self">cgi-design<span lang="ja-JP">のスライドショー２</span></a></span><span lang="ja-JP">を設置しました。設置フォルダーは</span>VIEW47<span lang="ja-JP">です。<br>
+      </span></font><font face="ＭＳ 明朝">会員専用エリアからｗｅｂ上で追加、削除が出来るので特別なスキルは不要です。 </font></p>
+      <p lang="ja-JP"><font face="ＭＳ 明朝"><span lang="ja-JP"><b>会員間の撮影写真の受け渡し用にアルバム投稿ＣＧＩを設置</b></span><span lang="ja-JP">した。これも</span>cgi-design<span lang="ja-JP">の物を設置。フォルダーは</span>member/view6<span lang="ja-JP">　　<a href="http://cgi-design.net/prog/view/view6/index.htm" target="_self">フォトサムネール３</a>を使用</span></font></p>
+      <p><font face="ＭＳ 明朝"><span lang="ja-JP"><b>会員専用エリア表紙ページにお知らせを設置</b></span><span lang="ja-JP">した。<br>
+      </span></font><font face="ＭＳ 明朝">cgi<span lang="ja-JP">は</span>cgi-design<span lang="ja-JP">　　の<a href="http://cgi-design.net/prog/inf/inf11/index.htm" target="_self">インラインフレーム型情報</a>である。<br>
+      設置フォルダーは　/member/inf11</span></font></p>
+      <p lang="ja-JP"><font face="ＭＳ 明朝"><span lang="ja-JP"><b>スケジュール</b></span><b>cgi</b><span lang="ja-JP">を設置した。<br>
+      </span></font><font face="ＭＳ 明朝"><span lang="ja-JP"><span lang="ja-JP">cgi-design <a href="http://cgi-design.net/prog/sche/sche28/index.htm" target="_self">スケジュールカレンダー４</a>　設置フォルダーは　/member/sche28</span><br>
+      <br>
+      <strong>公開用トップページにお知らせ窓を設置</strong></span><span lang="ja-JP">し、会員専用エリアから書き込み、修正可能とした。<br>
+      </span></font><font face="ＭＳ 明朝"><span lang="ja-JP">cgiーdesign <a href="http://cgi-design.net/prog/inf/inf11/index.htm" target="_self">インラインフレーム型情報</a>　表紙お知らせは設置フォルダーは</span>/hyosiosirase</font></p>
+      <p lang="ja-JP"><font size="4" face="ＭＳ 明朝"><b>ＣＧＩの設定変更について<br>
+      </b></font><font face="ＭＳ 明朝">このＨＰで使用しているＣＧＩは無料サービスで配布されている物を使用しています。<br>
+      </font><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal">現時点でＫＥＮＴＷＥＢ　　</span></span><font color="#000080"><span lang="zxx"><u><a href="http://www.kent-web.com/" target="_self"><span style="FONT-WEIGHT: normal">http://www.kent-web.com/</span></a></u></span></font></font><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"><br>
+      ＣＧＩ－ＤＥＳＩＧＮ　　</span></span><font color="#000080"><span lang="zxx"><u><a href="http://cgi-design.net/" target="_self"><span style="FONT-WEIGHT: normal">http://cgi-design.net/</span></a></u></span></font></font><font face="ＭＳ 明朝"><br>
+      のものを使用しています。</font><font face="ＭＳ 明朝"><br>
+      </font><font face="ＭＳ 明朝"><br>
+      ＫＥＮＴＷＥＢ<br>
+      </font><font face="ＭＳ 明朝">多くのファイルが含まれていて、ＣＧＩ－ＤＥＳＩＧＮに比べ設置が若干面倒な感じがあります。<br>
+      </font><font face="ＭＳ 明朝">管理画面は記事の削除などに限られ大きな変更はできません。<br>
+      </font><font face="ＭＳ 明朝">上記の会員専用ページ表示数変更などの様に管理画面からは出来ない事への対処は</font><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal">ＫＥＮＴＷＥＢ配布の物は、</span></span><span style="FONT-WEIGHT: normal">init.cgi </span><span lang="ja-JP"><span style="FONT-WEIGHT: normal">に書かれていることが多く、設置説明に基づき</span></span><span style="FONT-WEIGHT: normal">TeraPad</span><span lang="ja-JP"><span style="FONT-WEIGHT: normal">などのエディターで書き換えれば反映されます。<br>
+      <br>
+      会員専用掲示板を例に下記に掲載します。<br>
+      </span></span></font></p>
+      <TABLE style="HEIGHT: 1px; WIDTH: 944px" cellspacing="0" cellpadding="0" width="944" bgcolor="#ffffff" border="1">
+        
+          <tr>
+            <td><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal">　<strong>init.cgi</strong> を TeraPadエディタ 
+            で開いて必要な箇所を修正します。この設定は14年2月4日現在の状態です。今後変更の可能性がありそうな箇所を<font color="#ff0000">赤色</font>にしておきます。<br>
+            &nbsp;<br>
+            <br>
+            # 
+            モジュール宣言/変数初期化<br>
+            use strict;<br>
+            my 
+            %cf;<br>
+            #┌─────────────────────────────────<br>
+            #│ JOYFUL NOTE : 
+            init.cgi - 2014/01/05<br>
+            #│ Copyright (c) KentWeb<br>
+            #│ <a href="http://www.kent-web.com/">http://www.kent-web.com/</a><br>
+            #└─────────────────────────────────<br>
+            $cf{version} 
+            = 'JoyfulNote v5.2';<br>
+            #┌─────────────────────────────────<br>
+            #│ 
+            [注意事項]<br>
+            #│ 1. 
+            このスクリプトはフリーソフトです。このスクリプトを使用した<br>
+            #│&nbsp;&nbsp;&nbsp; 
+            いかなる損害に対して作者は一切の責任を負いません。<br>
+            #│ 2. 
+            設置に関する質問はサポート掲示板にお願いいたします。<br>
+            #│&nbsp;&nbsp;&nbsp; 
+            直接メールによる質問は一切お受けいたしておりません。<br>
+            #└─────────────────────────────────</span></span></font>
+            <dl class="init">
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal">#===========================================================<br>
+              # 
+              ■ 
+              設定項目<br>
+              #===========================================================</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># <font color="#ff0000">管理者用パスワード<br>
+              $cf{password} = 
+              '0123'</font>;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># サムネイル画像を作成する（要：Image::Magick）<br>
+              # → 
+              縮小画像を自動生成し、画像記事の表示速度を軽くする機能<br>
+              # 0=no 1=yes<br>
+              $cf{thumbnail} = 0;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 掲示板タイトル<br>
+              $cf{bbs_title} = "情報交換掲示板";</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># アップロードファイル管理者チェック機能 (0=no 1=yes)<br>
+              # → 
+              アップロードファイルは管理者がチェック後表示<br>
+              $cf{img_check} = 0;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># <font color="#ff0000">最大記事数 (親記事+レス記事も含めた数）<br>
+              $cf{max} = 
+              50;</font></span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 返信がつくと親記事をトップへ移動 (0=no 1=yes)<br>
+              $cf{topsort} = 1;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 画像の位置<br>
+              # 1 : コメントの下<br>
+              # 2 : 
+              コメントの左（廻り込み）<br>
+              $cf{image_position} = 1;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># ミニカウンタの設置<br>
+              # → 0=no 1=テキスト 2=GIF画像<br>
+              $cf{counter} = 1;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># ミニカウンタの桁数<br>
+              $cf{mini_fig} = 6;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># テキストのとき：ミニカウンタの色<br>
+              $cf{cntcol} = "#bb0000";</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># GIFカウンタのとき：画像までのディレクトリ<br>
+              $cf{gif_path} = "./icon";</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># カウンタファイル<br>
+              $cf{cntfile} = './data/count.dat';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 本体CGIのURL【URLパス】<br>
+              $cf{bbs_cgi} = './joyful.cgi';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 書込CGIのURL【URLパス】<br>
+              $cf{regist_cgi} = './regist.cgi';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 管理CGIのURL【URLパス】<br>
+              $cf{admin_cgi} = './admin.cgi';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># ログファイル【サーバパス】<br>
+              $cf{logfile} = './data/log.cgi';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># アップロードディレクトリ【サーバパス】<br>
+              $cf{imgdir} = './img';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># アップロードディレクトリ【URLパス】<br>
+              $cf{imgurl} = "./img";</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># テンプレートディレクトリ【サーバパス】<br>
+              $cf{tmpldir} = './tmpl';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 戻り先のURL【URLパス】<br>
+              $cf{homepage} = "../index.html";</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 文字コード自動判別（0=no 1=yes）<br>
+              # → 
+              フォーム入力の文字コード判別を行う場合<br>
+              $cf{conv_code} = 0;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 記事 [タイトル] 部の長さ (全角文字換算)<br>
+              $cf{sub_len} = 15;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 同一IPアドレスからの連続投稿時間（秒数）<br>
+              # → 値を 0 
+              にするとこの機能は無効になります<br>
+              $cf{wait} = 60;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># <font color="#ff0000">１画面当たりの記事表示数 (親記事基準)<br>
+              # → 
+              順に、スレッド表示、トピック表示、アルバム表示<br>
+              $cf{max_thread} = 
+              10;<br>
+              $cf{max_topics} = 20;<br>
+              $cf{max_albums} = 20;</font></span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># メール通知機能<br>
+              # → 0=no&nbsp; 1=yes<br>
+              $cf{mailing} = 0;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># メール通知先アドレス（メール通知する場合）<br>
+              $cf{mailto} = <a href="mailto:'xxx@xxx.xxx'">'xxx@xxx.xxx'</a>;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># sendmailのパス（メール通知する場合）<br>
+              $cf{sendmail} = 
+              '/usr/lib/sendmail';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># sendmailの -fコマンドが必要な場合<br>
+              # 0=no 1=yes<br>
+              $cf{sendm_f} = 0;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 文字色の設定（半角スペースで区切る）<br>
+              $cf{colors} = '#800000 #DF0000 #008040 
+              #0000FF #C100C1 #FF80C0 #FF8040 #000080 #808000';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># URLの自動リンク (0=no 1=yes)<br>
+              $cf{auto_link} = 1;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># アイコン画像【URLパス】<br>
+              # → 順に [eメール] [ホームページ]<br>
+              $cf{ico_mail} = 
+              "./icon/mail.gif";<br>
+              $cf{ico_home} =
+ 
+     "./icon/home.gif";</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># ホスト取得方法<br>
+              # 0 : gethostbyaddr関数を使わない<br>
+              # 1 : 
+              gethostbyaddr関数を使う<br>
+              $cf{gethostbyaddr} = 0;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># アクセス制限（半角スペースで区切る、アスタリスク可）<br>
+              #&nbsp; → 
+              拒否ホスト名を記述（後方一致）【例】*.anonymizer.com<br>
+              $cf{deny_host} = 
+              '';<br>
+              #&nbsp; → 
+              拒否IPアドレスを記述（前方一致）【例】210.12.345.*<br>
+              $cf{deny_addr} = '';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 禁止ワード<br>
+              # → 投稿時禁止するワードをコンマで区切る<br>
+              $cf{no_wd} = '';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 日本語チェック（投稿時日本語が含まれていなければ拒否する）<br>
+              # 0=No&nbsp; 
+              1=Yes<br>
+              $cf{jp_wd} = 1;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># URL個数チェック<br>
+              # → 投稿コメント中に含まれるURL個数の最大値<br>
+              $cf{urlnum} = 2;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># <font color="#ff0000">アップロードを許可するファイル（0=no 
+              1=yes）<br>
+              $cf{ok_text}&nbsp; = 0;&nbsp; # 
+              TEXT<br>
+              $cf{ok_gif}&nbsp;&nbsp; = 1;&nbsp; # 
+              GIF<br>
+              $cf{ok_jpeg}&nbsp; = 1;&nbsp; # JPEG<br>
+              $cf{ok_excel} = 
+              1;&nbsp; # EXCEL<br>
+              $cf{ok_word}&nbsp; = 1;&nbsp; # 
+              WORD<br>
+              $cf{ok_ppt}&nbsp;&nbsp; = 0;&nbsp; # POWER 
+              POINT<br>
+              $cf{ok_zip}&nbsp;&nbsp; = 1;&nbsp; # 
+              ZIP<br>
+              $cf{ok_pdf}&nbsp;&nbsp; = 1;&nbsp; # PDF</font></span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"><font color="#ff0000"># 投稿受理最大サイズ (bytes)<br>
+              # → 例 : 102400 = 
+              100KB<br>
+              $cf{maxdata} =    5120000;</font></span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 画像ファイルの最大表示の大きさ（単位：ピクセル）<br>
+              # → 
+              これを超える画像は縮小表示します<br>
+              $cf{max_img_w} = 250;<br>
+              $cf{max_img_h} = 150;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># クッキーID名（特に変更しなくてよい）<br>
+              $cf{cookie_id} = "joyfulbbs";</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 
+              -------------------------------------------------------------- 
+              #<br>
+              # [ 以下は「過去ログ」機能を使用する場合の設定 ]<br>
+              #<br>
+              # 過去ログ生成<br>
+              # → 0=no 
+              1=yes<br>
+              $cf{pastkey} = 0;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 過去ログ用NOファイル【サーバパス】<br>
+              $cf{nofile}&nbsp; = 
+              './data/pastno.dat';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 過去ログのディレクトリ【サーバパス】<br>
+              # → パスの最後に / をつけない<br>
+              $cf{pastdir} = 
+              './data/past';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 過去ログ１ファイルの行数<br>
+              # → この行数を超えると次ページを自動生成します<br>
+              $cf{pastmax} = 
+              600;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 
+              -------------------------------------------------------------- 
+              #<br>
+              # [ 以下は「画像認証機能」機能を使用する場合の設定 ]<br>
+              #<br>
+              # 画像認証機能の使用<br>
+              # 0 : 
+              しない<br>
+              # 1 : ライブラリ版（pngren.pl）<br>
+              # 2 : モジュール版（GD::SecurityImage + 
+              Image::Magick）→ Image::Magick必須<br>
+              $cf{use_captcha} = 0;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 認証用画像生成ファイル【URLパス】<br>
+              $cf{captcha_cgi} = './captcha.cgi';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 画像認証プログラム【サーバパス】<br>
+              $cf{captcha_pl} = 
+              './lib/captcha.pl';<br>
+              $cf{captsec_pl} = 
+              './lib/captsec.pl';<br>
+              $cf{pngren_pl}&nbsp; = './lib/pngren.pl';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 画像認証機能用暗号化キー（暗号化/復号化をするためのキー）<br>
+              # → 
+              適当に変更してください。<br>
+              $cf{captcha_key} = 'captjoyfulbbs';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 投稿キー許容時間（分単位）<br>
+              # → 
+              投稿フォーム表示後、送信ボタンが押されるまでの可能時間。<br>
+              $cf{cap_time} = 30;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 投稿キーの文字数<br>
+              # ライブラリ版 : 4～8文字で設定<br>
+              # モジュール版 : 
+              6～8文字で設定<br>
+              $cf{cap_len} = 6;</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># 画像/フォント格納ディレクトリ【サーバパス】<br>
+              $cf{bin_dir} = './lib/bin';</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># [ライブラリ版] 画像ファイル [ ファイル名のみ ]<br>
+              $cf{si_png} = "stamp.png";</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"># [モジュール版] 画像フォント [ ファイル名のみ ]<br>
+              $cf{font_ttl} = 
+              "tempest.ttf";</span></span></font>
+              <dt><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal">#===========================================================<br>
+              # 
+              ■ 
+              設定完了<br>
+              #===========================================================</span></span></font></dt>
+            </dl>
+            </td>
+          </tr>
+        
+      </TABLE>
+      <p lang="ja-JP" style="FONT-WEIGHT: normal"><font face="ＭＳ 明朝">ＣＧＩ－ＤＥＳＩＧＮのものは</font><font face="ＭＳ 明朝">ファイル数が少なく設置は簡単です。<br>
+      </font><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal">管理画面からかなりの項目について変更が可能で</span></span><span style="FONT-WEIGHT: normal">KENTWEB</span><span lang="ja-JP"><span style="FONT-WEIGHT: normal">の物の様に</span></span><span lang="ja-JP"><span style="FONT-WEIGHT: normal">エディターで変更し、サーバーに転送するという作業は必要なくこれも簡単にできます。</span></span></font></p>
+      <p lang="ja-JP" style="FONT-WEIGHT: normal"><font face="ＭＳ 明朝"><b>問い合わせフォームメール設置<br>
+      </b></font><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal">富山労山への問い合わせに、従来のメールアドレスを表記しておく形式からフォームメール</span></span><span style="FONT-WEIGHT: normal">cgi</span><span lang="ja-JP"><span style="FONT-WEIGHT: normal">使用に変更した。<br>
+      </span></span></font><font face="ＭＳ 明朝"><span style="FONT-WEIGHT: normal">使用cgi</span><span lang="ja-JP"><span style="FONT-WEIGHT: normal">は<br>
+      </span></span></font><font color="#000080"><span lang="zxx"><u><a href="http://www.kent-web.com/mail/captmail.html"><font face="ＭＳ 明朝"><span style="FONT-WEIGHT: normal">http://www.kent-web.com/mail/captmail.html</span></font></a></u></span></font><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"><br>
+      <br>
+      問合わせ種別の変更は　</span></span><span style="FONT-WEIGHT: normal">/captmail/tmpl/form.html </span><span lang="ja-JP"><span style="FONT-WEIGHT: normal">の下図ソース部分を編集する。<br>
+      </span></span></font><font face="ＭＳ 明朝">画面だけ編集しても、送信メールに反映されない。<br>
+      <img border="0" alt="" src="11.gif" width="600" height="381"></font></p>
+      <p lang="ja-JP" style="FONT-WEIGHT: normal"><font face="ＭＳ 明朝"><br>
+      </font></p>
+      <p lang="ja-JP" style="FONT-WEIGHT: normal"><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal">リンク集を簡単に変更できるように、</span></span><span style="FONT-WEIGHT: normal">CGI</span><span lang="ja-JP"><span style="FONT-WEIGHT: normal">を利用する仕組みに変更した。</span></span></font></p>
+      <p><font face="ＭＳ 明朝"><span style="FONT-WEIGHT: normal">cgi-design</span><span lang="ja-JP"><span style="FONT-WEIGHT: normal">の<a href="http://cgi-design.net/prog/link/link11/index.htm" target="_self">バナーリンク集２</a>　設置は　</span></span><span style="FONT-WEIGHT: normal">/link/link11/link11.cgi 
+      <br>
+      </span></font><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal">この</span></span><span style="FONT-WEIGHT: normal">cgi</span><span lang="ja-JP"><span style="FONT-WEIGHT: normal">は画面の一番下に管理画面のリンクが現れるので</span></span><span style="FONT-WEIGHT: normal">link11.cgi</span><span lang="ja-JP"><span style="FONT-WEIGHT: normal">のソースを改ざんし［管理］が見えないように改良した。これに伴い、会員専用画面に管理画面へのリンクを設置（リンク集変更）した。<br>
+      <br>
+      </span></span></font></p>
+      <TABLE style="HEIGHT: 22px; WIDTH: 832px" cellspacing="0" cellpadding="0" bgcolor="#ffffff" border="1">
+        
+          <tr>
+            <td><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal">　※CGIのプログラムを変更する時のテクニックとして、変更するソースの先頭に　#　を着けると単なるコメントとなりそのコマンドは無効となる。プログラムを変更したが動作が上手くいかず元に戻したい時に　#　を消せば動作が簡単に復活するので便利である。</span></span></font></td>
+          </tr>
+        
+      </TABLE>
+      <p><font face="ＭＳ 明朝"><span lang="ja-JP"><span style="FONT-WEIGHT: normal"><br>
+      <br>
+      <img style="HEIGHT: 100px; WIDTH: 930px" border="0" alt="" src="12.gif" width="1000" height="117"><br>
+      </span></span></font></p>
+      </TD>
+    </tr>
+    <tr>
+      <td></td>
+    </tr>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0032">　<font face="ＭＳ 明朝"><A name="7">７、CGIのパーミッションについて</A></font></TD>
+    </tr>
+    <tr>
+      <td>　<font face="ＭＳ 明朝">パーミッションとは ?<br>
+      <br>
+      &nbsp;　パーミッション (permission) 
+      とは「許可」「認可」を意味する言葉です。 
+      <br>
+      　サーバとして用いられるコンピュータは複数の人たちが同時に利用する性格のものであるため、お互いが他人に対して迷惑をかけたり、邪魔をしたりすることができないように、ファイルやホルダ（ディレクトリ）ごとに自分が読む権利、書いたり消したりする権利、実行する権利を個別に設定することができるようになっています。これらの権利の設定のことを指してパーミッションと呼びます。 
+      <br>
+      　 パーミッションを適切に設定しておけば、ファイルを消したり書き換えられたりすることを防止することができます。&nbsp; 
+      <br>
+      <br>
+      　一つのファイル又はディレクトリに対して、オーナー（そのファイルの所有者）、グループ（同じグループのメンバー）、全員（その他の第三者）、という３種類のユーザー毎に、読む・書く・実行の３種類のパーミッションを設定することができます。 
+      <br>
+      　 
+      実行とはファイルの場合はプログラムやスクリプトなどを実行する権利、ホルダ（ディレクトリ）の場合はそのホルダ（ディレクトリ）の中に移動する権利のことを指します。 
+      <br>
+      <br>
+      　　こう書くとややこしいですが、以下に図を書いて示してみます。 <br>
+      <br>
+      　　&nbsp; 　　　読む 書く 実行 
+      <br>
+      　　所有者　 ○　 ○　 ○ <br>
+      　　グループ ○　 ○　 ○ <br>
+      　　全　員　 ○ 　○　 ○ 
+      <br>
+      　　　　　　○を付けた９つの部分に対して、それぞれ許可するかどうかを設定します。 <br>
+      <br>
+      　 
+      所有者はもちろんあなた自身です。しかし、あなたが所有者であるとサーバが判断してくれるのは、FTPソフトウェアなどを使って、ID 
+      とパスワードを入力してログインしてきた場合だけです。NetscapeNavigator 
+      などのブラウザを使ってホームページにアクセスしてきた場合には、あなた自身も第三者と判断されます。 <br>
+      　 
+      グループはサーバ管理者によって分けられていますが、第三者と同じ扱いと思って下さい。<br>
+      　 
+      従って、パーミッションを設定する際には、自分自身である所有者と、ホームページにアクセスしてくる人たちである第三者とを、ファイルやホルダ（ディレクトリ）毎に区別して設定しておけば、ファイルやホルダ（ディレクトリ）を守ることができます。 
+      <br>
+      
+      
+        <p>
+       <font color="red"><2017/01/27補足></font></br>
+        　2017/01/12以降、CGIファイルおよびCGIファイルが入っているディレクトリのパーミッション設定において、「所有者」以外の書き込み権限が許可されていると、CGIを実行した時にエラー(500 Internal Server Error)が発生するようになりました。<br>
+        　これは、サーバ管理会社においてWebサーバにセキュリティ強化対策としてsuExecを導入したためです。<br>
+        　もし今後「CGIディレクトリを作り直したら、なぜかCGIが動かなくなった」といった現象が起きたときは、CGIファイルとそのディレクトリのパーミッションが「777」（全ユーザにすべて許可）などになっていないか確認して、もしそうなっていたらパーミッションを「755」（所有者は全て許可で、グループと全員は読みと実行のみ）に変更してください。
+        </p>
+    
+       <br>
+      <strong>設定の方法<br>
+      <br>
+      </strong>FFFTPでサーバー側の設定するファイルを選択し、右クリックし属性の変更で下の画面となるので設定できます。<br>
+      <br>
+      <strong><img border="0" alt="" src="13.gif" width="600" height="453"></strong></font></td>
+    </tr>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0032"><font face="ＭＳ 明朝"><A name="8">　８、とりあえず無料サーバーなどで練習してみましょう</A></font></TD>
+    </tr>
+    <tr>
+      <td><font face="ＭＳ 明朝">　ここまでざっと読んだ方は、なんだか大変そうだなと感じたかもしれません。<br>
+      確かに、CGIの設置や変更などはパソコンでは今までやったことが無さそうな内容で、パスとかパーミッションとかPerlとか難しそうな用語が出てきます。<br>
+      そうは言っても個人のホームページを作っている方も多い世の中です。こんな面倒があれば多くの人は尻込みするでしょう。<br>
+      実際は、掲示板があったとしてもレンタル掲示板やサーバー業者が準備した物にリンクを張る程度が多く、これは一旦設置すれば後の作業はありません。<br>
+      　記事などの追加はここで紹介したフリーや有料ソフトで、ワープロ感覚で編集しFTPソフト(または編集ソフトに備わっているFTP機能）を利用してアップロードしているだけだと思います。<br>
+      　したがって、ソフトで編集するスキルとFTPでアップロードするスキルがあれば特に問題なくホームページの管理は出来ます。<br>
+      あまり構えずやってみることで自然と分かってきて、次はCGIの自前設置などスキルアップの意欲が湧いてくると思います。<br>
+      <br>
+      </font><a href="http://homepage.ojaru.jp/m-h.html"><font face="ＭＳ 明朝">http://homepage.ojaru.jp/m-h.html</font></a><font face="ＭＳ 明朝">　を参考にCGIの練習もできるようなサーバーを借りて実際にやってみてはどうでしょうか。<br>
+      <br>
+      「習うより慣れよ」です。</font></td>
+    </tr>
+    <TR>
+      <TD bgcolor="#c1e0ff"><FONT face="ＭＳ Ｐ明朝"><A name="9">　９、複数のパソコンで管理する場合の注意点</A></FONT></TD>
+    </TR>
+    <TR>
+      <TD>　複数の方がホームページの修正作業などを行う場合。<BR>
+      　一人の管理者でも、自宅のパソコンと事務所のパソコンなど複数のパソコンで作業を行う場合。<BR>
+      <BR>
+      　以上のような場合はサーバーに接続したら、まず作業しているファイルをダウンロードしてください。これをしないと、パソコンに保管されているかなり古いファイルと置き換わってしまう可能性があります。<BR>
+      <BR>
+      </TD>
+    </TR>
+    <tr>
+      <TD bgcolor="#c1e0ff" bordercolor="#de0032">　更新履歴</TD>
+    </tr>
+    <tr>
+      <td>　14年2月４日　作成</td>
+    </tr>
+  
+</TABLE>
+</CENTER>
+</body>
+</html>

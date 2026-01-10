@@ -1,0 +1,182 @@
+@charset "shift_jis";
+
+body, td, th {
+	font-size: 80%;
+	background: #fef3d3;
+	color: #000;
+}
+a {
+	text-decoration: none;
+}
+a:hover {
+	color: #dd0000;
+	text-decoration: underline;
+}
+
+/* タイトル装飾 */
+h1 {
+	font-size: 180%;
+	margin-bottom: 0;
+	color: #330000;
+}
+
+/* TOPリンク */
+div.panel {
+	float: left;
+	background: #ca9662;
+	padding: 4px;
+	width: 3.5em;
+	text-align: center;
+	margin-right: 5px;
+}
+div.panel a {
+	color: #330000;
+	font-weight: bold;
+}
+div.clear {
+	clear: both;
+}
+
+/* アップ用フォーム */
+table.upform td {
+	padding: 1px;
+}
+table.upform span {
+	margin-left: 3px;
+	font-size: 90%;
+	color: #330000;
+}
+
+/* アイコン */
+img.icon {
+	vertical-align: middle;
+	border: 0;
+}
+
+/* サブタイトル */
+div.sub-ttl {
+	color: #663300;
+	font-weight: bold;
+	border-top: 1px solid #663300;
+	padding-top: 5px;
+}
+
+span.ext {
+	color: #dd0000;
+	font-family: Verdana,Helvetica,Arial;
+}
+
+/* page-top */
+div.pgtop {
+	text-align: right;
+	font-size: 10px;
+	font-family: Verdana,Helvetica,Arial;
+	margin: 5px 0;
+}
+
+/* DL用ファイル一覧テーブル */
+table.list {
+	border-top: 1px solid #663300;
+	border-left: 1px solid #663300;
+	border-collapse: collapse;
+	border-spacing: 0;
+	background-color: #fff;
+	empty-cells: show;
+}
+table.list th {
+	border-right: 1px solid #663300;
+	border-bottom: 1px solid #663300;
+	color: #330000;
+	background-color: #996633;
+	background-image: url(icon/table-back.gif);
+	background-position: left top;
+	padding: 0.3em 0.8em;
+	text-align: center;
+	white-space: nowrap;
+}
+table.list td {
+	border: 1px solid #663300;
+	background: #fefbef;
+}
+td.ta-l {
+	padding: 0.3em 0.8em;
+}
+td.ta-c {
+	text-align: center;
+	padding: 0.3em;
+}
+p.red {
+	color: #dd0000;
+}
+p.msg {
+	color: #330000;
+}
+div.ta-c {
+	text-align: center;
+	width: 100%;
+}
+div.ta-r {
+	text-align: right;
+}
+div.main {
+	text-align: center;
+    margin: 2em auto;
+    width: 250px;
+}
+input.btn {
+	margin: 3em;
+	width: 70px;
+}
+div.ttl {
+	border-bottom: 1px solid #330000;
+	padding: 4px;
+	color: #330000;
+	font-weight: bold;
+}
+
+/* 削除フォームテーブル */
+table.del-tbl {
+	border-collapse: collapse;
+	margin: 1em 0;
+}
+table.del-tbl th, table.del-tbl td {
+	border: 1px solid #330000;
+	padding: 6px;
+}
+table.del-tbl th {
+	background: #ffb871;
+}
+table.del-tbl td {
+	background: #fff;
+}
+
+/* 閉じるボタン */
+div.close {
+	margin-top: 4em;
+}
+
+/* ページボタン */
+span.pg-on, span.pg-off {
+	font-size: 11px;
+	width: 7px;
+	margin: 2px;
+	padding: 2px 4px;
+	border: 1px solid #849a9f;
+	font-family:Verdana,Helvetica,Arial;
+}
+span.pg-on, span.pg-on a {
+	color: #f0f0f0;
+	background: #849a9f;
+}
+span.pg-off, span.pg-off a {
+	color: #879da2;
+	background: #fefbef;
+}
+div.page-btn {
+	width: 90%;
+	text-align: left;
+}
+div.pg-btn {
+	margin: 0.6em 0;
+}
+

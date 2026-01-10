@@ -1,0 +1,124 @@
+@charset "shift_jis";
+
+/* 本体定義 */
+body,td,th {
+	margin: 0;
+	font-size: 80%;
+	background: #ddd;
+}
+a:link,a:visited {
+	color: #1122cc;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+	color: #dd0000;
+}
+
+/* 中央・左・右寄せ */
+div.ta-c {
+	text-align: center;
+}
+div.ta-l {
+	text-align: left;
+}
+div.ta-r {
+	text-align: right;
+}
+
+/* 掲示板メイン */
+div.main {
+	width: 85%;
+	background: #fff;
+	border-top: 3px solid #e43a47;
+	margin: 0 auto;
+}
+
+/* 掲示板タイトル */
+h1 {
+	font-size: 200%;
+	color: #e43a47;
+}
+
+/* 記事デザイン */
+div.article {
+	width: 96%;
+	margin: 10px auto;
+	border-top: 1px dotted #555;
+	text-align: left;
+	padding: 1em;
+	color: #555;
+}
+div.art-date {
+	text-align: right;
+	color: #009b4e;
+	font-size: 90%;
+	font-family: Verdana,Helvetica,Arial;
+}
+div.art-sub {
+	margin: 0.5em 0 1em 0;
+	color: #e43a47;
+	font-size: 130%;
+	font-weight: bold;
+}
+
+/* ページ繰越ボタン */
+span.pg-on,span.pg-off {
+	display:-moz-inline-box;
+	-moz-box-align: center;
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+	font-size: 12px;
+	width: 23px;
+	height: 23px;
+	margin: 2px;
+	padding: 2px;
+	border: 1px solid #e43a47;
+	font-family: Verdana,Helvetica,Arial;
+}
+span.pg-on,span.pg-on a {
+	color: #f0f0f0;
+	background: #e43a47;
+}
+span.pg-off,span.pg-off a {
+	color: #e43a47 !important;
+	background: #fff;
+}
+div.pg-btn {
+	width: 95%;
+	text-align: left;
+	margin: 1em auto;
+}
+
+/* 記事中の画像 */
+img.img {
+	border: none;
+	vertical-align: top;
+	margin-right: 0.5em;
+}
+
+/* TOPパネルボタン */
+div.top-panel {
+	margin: 1em;
+	text-align: left;
+}
+div.top-panel input {
+	width: 52px;
+	margin-right: 2px;
+}
+
+/* 赤文字 */
+p.red {
+	color: #dd0000;
+}
+
+/* pagetop */
+div.pg-top, div.pg-top a {
+	text-align: right;
+	font-family: Verdana,Helvetica,Arial;
+	font-size: 90%;
+	color: #e43a47 !important;
+	margin-bottom: 0;
+}
+

@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=shift_jis">
+<meta http-equiv="content-style-type" content="text/css">
+<link href="style.css" rel="stylesheet" type="text/css">
+<title>掲示板 ＞ 記事修正用フォーム</title>
+</head>
+<body>
+
+<p class="ta-r">
+	<form action="!bbs_cgi!">
+	<input type="hidden" name="bbs" value="!bbs!">
+	<input type="hidden" name="read" value="!read!">
+	<input type="submit" value="&lt; 戻る">
+	</form>
+</p>
+
+<div class="ttl">■ 記事修正用フォーム</div>
+
+<blockquote>
+<p>▼修正する箇所のみ編集し、送信ボタンを押してください。</p>
+<form action="!regist_cgi!" method="post" enctype="multipart/form-data">
+<input type="hidden" name="mode" value="log_edit">
+<input type="hidden" name="job" value="edit">
+<input type="hidden" name="no" value="!num!">
+<input type="hidden" name="pwd" value="!pwd!">
+<input type="hidden" name="bbs" value="!bbs!">
+<table class="regfm">
+<tr>
+	<th>おなまえ</th>
+	<td><input type="text" name="name" size="28" value="!name!"></td>
+</tr><tr>
+	<th>Ｅメール</th>
+	<td><input type="text" name="email" size="28" value="!email!"></td>
+</tr><tr>
+	<th>タイトル</th>
+	<td nowrap>
+		<input type="text" name="sub" size="36" value="!sub!" maxlength="15">
+		<input type="submit" value="投稿する"><input type="reset" value="リセット">
+	</td>
+</tr><tr>
+	<th colspan="2">
+		コメント<br>
+    	<textarea cols="56" rows="7" name="comment">!comment!</textarea>
+	</th>
+</tr><tr>
+	<th>参照URL</th>
+	<td><input type="text" size="50" name="url" value="!url!"></td>
+</tr><tr>
+	<th>添付File</th>
+	<td>
+		<input type="file" name="upfile" size="40">
+		<!-- attach -->
+	</td>
+</tr><tr>
+	<th>文字色</th>
+	<td>!color!</td>
+</tr>
+</table>
+</form>
+
+</blockquote>
+
+</body>
+</html>

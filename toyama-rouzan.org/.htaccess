@@ -1,0 +1,14 @@
+Options +ExecCGI 
+ AddHandler cgi-script .cgi 
+ AddHandler cgi-script .pl 
+#検索エンジンの旧ページURLにアクセスした人はWordpressのルートへリダイレクト
+ErrorDocument 404 /wp/
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteBase /
+# Redirect from "http://" to "https://"
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# ルートとindex.htmlへのアクセスをWordpressのルートへリダイレクト
+RewriteRule ^(|index\.html)$ wp/? [L,R=301]
+</IfModule>

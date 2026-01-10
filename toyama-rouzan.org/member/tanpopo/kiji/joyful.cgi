@@ -1,0 +1,1092 @@
+#!/usr/bin/perl
+
+#┌─────────────────────────────────
+#│ JOYFUL NOTE : joyful.cgi - 2014/01/05
+#│ Copyright (c) KentWeb
+#│ http://www.kent-web.com/
+#└─────────────────────────────────
+
+# モジュール宣言
+use strict;
+use CGI::Carp qw(fatalsToBrowser);
+use lib "./lib";
+use CGI::Minimal;
+
+# 設定ファイル認識
+require "./init.cgi";
+my %cf = init();
+
+# データ受理
+CGI::Minimal::max_read_size($cf{maxdata});
+my $cgi = CGI::Minimal->new;
+error('容量オーバー') if ($cgi->truncated);
+my %in = parse_form($cgi);
+
+# 処理分岐
+if ($in{mode} eq 'find') { find_data(); }
+if ($in{mode} eq 'note') { note_page(); }
+if ($in{mode} eq 'past' && $cf{pastkey}) { past_log(); }
+if ($in{mode} eq 'album') { album(); }
+bbs_list();
+
+#-----------------------------------------------------------
+#  記事表示部
+#-----------------------------------------------------------
+sub bbs_list {
+	# 返信フォーム
+	$in{res}  =~ s/\D//g;
+	$in{read} =~ s/\D//g;
+	res_form($in{res}) if ($in{res} || $in{read});
+
+	# トピック表示
+	bbs_topic() if ($in{bbs} == 1);
+
+	# ページ数定義
+	my $pg = $in{pg} || 0;
+
+	# 記事展開
+	my ($i,@log,%res,%nam,%sub,%dat,%com,%url,%col,%ext,%imw,%imh);
+	open(IN,"$cf{logfile}") or error("open err: $cf{logfile}");
+	my $top = <IN>;
+	while (<IN>) {
+		my ($no,$reno,$date,$name,$eml,$sub,$com,$url,$host,$pw,$col,$ext,$w,$h,$chk) = split(/<>/);
+
+		++$i if (!$reno);
+		next if ($i < $pg + 1);
+		next if ($i > $pg + $cf{max_thread});
+
+		# 親記事
+		if (!$reno) {
+			push(@log,$no);
+		# レス記事
+		} else {
+			$res{$reno} .= "$no,";
+		}
+		# リンク
+		$name = qq|<a href="mailto:$eml">$name</a>| if ($eml);
+		$url &&= qq|<a href="$url" target="_blank"><img src="$cf{ico_home}" class="icon"></a>|;
+		$com = auto_link($com) if ($cf{auto_link});
+
+		# ハッシュ化
+		$nam{$no} = $name;
+		$sub{$no} = $sub;
+		$dat{$no} = $date;
+		$com{$no} = $com;
+		$col{$no} = $col;
+		$url{$no} = $url;
+		if ($ext) {
+			if ($cf{img_check} && $chk eq '0') {
+				$ext{$no} = "hide";
+			} else {
+				$ext{$no} = $ext;
+				$imw{$no} = $w;
+				$imh{$no} = $h;
+			}
+		}
+	}
+	close(IN);
+
+	# 繰越ボタン作成
+	my $page_btn = make_pgbtn($i,$pg,'',$cf{max_thread});
+
+	# クッキー取得
+	my @cook = get_cookie();
+	$cook[2] ||= 'http://';
+
+	# 色選択ボタン
+	my @col = split(/\s+/,$cf{colors});
+	my $color;
+	foreach (0 .. $#col) {
+		if ($_ == $cook[3]) {
+			$color .= qq|<input type="radio" name="color" value="$_" checked>|;
+		} else {
+			$color .= qq|<input type="radio" name="color" value="$_">|;
+		}
+		$color .= qq|<span style="color:$col[$_]">■</span>\n|;
+	}
+
+	# カウンタ
+	my $counter = bbs_count() if ($cf{counter});
+
+	# テンプレート読込
+	open(IN,"$cf{tmpldir}/bbs.html") or error("open err: bbs.html");
+	my $tmpl = join('', <IN>);
+	close(IN);
+
+	# 過去ログ
+	$tmpl =~ s/<!-- past -->.+<!-- past -->//s if ($cf{pastkey} == 0);
+
+	open(IN,"$cf{tmpldir}/res.html") or error("open err: res.html");
+	my $resloop = join('', <IN>);
+	close(IN);
+
+	# テンプレート分割
+	my ($head,$loop,$foot) = split(/<!-- loop -->/,$tmpl);
+
+	# 画像認証作成
+	my ($str_plain,$str_crypt);
+	if ($cf{use_captcha} > 0) {
+		require $cf{captcha_pl};
+		($str_plain,$str_crypt) = cap::make($cf{captcha_key},$cf{cap_len});
+	} else {
+		$head =~ s/<!-- captcha -->.+<!-- captcha -->//s;
+	}
+
+	# 文字置換
+	for ($head,$foot) {
+		s/!bbs_title!/$cf{bbs_title}/g;
+		s/!([a-z]+_cgi)!/$cf{$1}/g;
+		s/!homepage!/$cf{homepage}/g;
+		s/!page_btn!/$page_btn/g;
+		s/!name!/$cook[0]/;
+		s/!email!/$cook[1]/;
+		s/!url!/$cook[2]/;
+		s/!str_crypt!/$str_crypt/g;
+		s/!color!/$color/g;
+		s/!sub!//g;
+		s/!reno!//g;
+		s/!counter!/$counter/g;
+	}
+
+	# ヘッダ表示
+	print "Content-type: text/html; charset=shift_jis\n\n";
+	print $head;
+
+	# 記事表示
+	foreach (@log) {
+		# レス
+		my $res;
+		foreach my $r ( split(/,/, $res{$_}) ) {
+			# 添付
+			$com{$r} = qq|<span style="color:$col[$col{$r}]">$com{$r}</span>|;
+			if (defined($ext{$r})) {
+				$com{$r} = att_file($r,$com{$r},$ext{$r},$imw{$r},$imh{$r});
+			}
+			my $tmp = $resloop;
+			$tmp =~ s/!sub!/$sub{$r}/g;
+			$tmp =~ s/!name!/$nam{$r}/g;
+			$tmp =~ s/!url!/$url{$r}/g;
+			$tmp =~ s/!date!/$dat{$r}/g;
+			$tmp =~ s/!num!/$r/g;
+			$tmp =~ s/!comment!/$com{$r}/g;
+			$res .= $tmp;
+		}
+		# 添付
+		$com{$_} = qq|<span style="color:$col[$col{$_}]">$com{$_}</span>|;
+		if (defined($ext{$_})) {
+			$com{$_} = att_file($_,$com{$_},$ext{$_},$imw{$_},$imh{$_});
+		}
+		my $tmp = $loop;
+		$tmp =~ s/!sub!/$sub{$_}/g;
+		$tmp =~ s/!name!/$nam{$_}/g;
+		$tmp =~ s/!url!/$url{$_}/g;
+		$tmp =~ s/!date!/$dat{$_}/g;
+		$tmp =~ s/!num!/$_/g;
+		$tmp =~ s/!comment!/$com{$_}/g;
+		$tmp =~ s/!bbs_cgi!/$cf{bbs_cgi}/g;
+		$tmp =~ s|<!-- res -->|<div class="ta-r">$res</div>|g if ($res);
+		print $tmp;
+	}
+
+	# フッタ
+	footer($foot);
+}
+
+#-----------------------------------------------------------
+#  返信フォーム
+#-----------------------------------------------------------
+sub res_form {
+	my $resnum = $in{res} ? $in{res} : $in{read};
+#	my $bbs = $in{bbs} == 1 ? 1 : 0;
+
+	my ($flg,$resub,@res,%nam,%sub,%dat,%com,%url,%ext,%chk,%col,%imw,%imh);
+	open(IN,"$cf{logfile}") or error("open err: $cf{logfile}");
+	my $top = <IN>;
+	while (<IN>) {
+		my ($no,$reno,$date,$name,$eml,$sub,$com,$url,$host,$pw,$col,$ext,$w,$h,$chk) = split(/<>/);
+
+		if ($resnum == $no) {
+			$flg = 1;
+
+			# タイトル名
+			if ($sub =~ /^Re:/) {
+				$resub = $sub;
+			} else {
+				$resub = "Re: $sub";
+			}
+
+		} elsif ($resnum == $reno) {
+			push(@res,$no);
+		} else {
+			next;
+		}
+		# リンク
+		$name = qq|<a href="mailto:$eml">$name</a>| if ($eml);
+		$url &&= qq|<a href="$url" target="_blank"><img src="$cf{ico_home}" class="icon"></a>|;
+		$com = auto_link($com) if ($cf{auto_link});
+
+		$nam{$no} = $name;
+		$sub{$no} = $sub;
+		$dat{$no} = $date;
+		$com{$no} = $com;
+		$col{$no} = $col;
+		$url{$no} = $url;
+		$chk{$no} = $chk;
+		if ($ext) {
+			if ($cf{img_check} && $chk eq '0') {
+				$ext{$no} = "hide";
+			} else {
+				$ext{$no} = $ext;
+				$imw{$no} = $w;
+				$imh{$no} = $h;
+			}
+		}
+	}
+	close(IN);
+
+	if (!$flg) { error("不正な返信要求です"); }
+
+	# クッキー取得
+	my @cook = get_cookie();
+	$cook[2] ||= 'http://';
+
+	# 色選択ボタン
+	my @col = split(/\s+/,$cf{colors});
+	my $color;
+	foreach (0 .. $#col) {
+		if ($_ == $cook[3]) {
+			$color .= qq|<input type="radio" name="color" value="$_" checked>|;
+		} else {
+			$color .= qq|<input type="radio" name="color" value="$_">|;
+		}
+		$color .= qq|<span style="color:$col[$_]">■</span>\n|;
+	}
+
+	# テンプレート読込
+	my $file = $in{read} ? 'topic2.html' : 'bbs.html';
+	open(IN,"$cf{tmpldir}/$file") or error("open err: $file");
+	my $tmpl = join('', <IN>);
+	close(IN);
+
+	open(IN,"$cf{tmpldir}/res.html") or error("open err: res.html");
+	my $resloop = join('', <IN>);
+	close(IN);
+
+	# 過去ログ
+	$tmpl =~ s/<!-- past -->.+<!-- past -->//s if ($cf{pastkey} == 0);
+
+	# テンプレート分割
+	my ($head,$loop,$foot) = split(/<!-- loop -->/,$tmpl);
+
+	# 画像認証作成
+	my ($str_plain,$str_crypt);
+	if ($cf{use_captcha} > 0) {
+		require $cf{captcha_pl};
+		($str_plain,$str_crypt) = cap::make($cf{captcha_key},$cf{cap_len});
+	} else {
+		$head =~ s/<!-- captcha -->.+<!-- captcha -->//s;
+	}
+
+	# 文字置換
+	for ($head, $foot) {
+		s/!bbs_title!/$cf{bbs_title}/g;
+		s/!([a-z]+_cgi)!/$cf{$1}/g;
+		s/!homepage!/$cf{homepage}/g;
+		s/!name!/$cook[0]/;
+		s/!email!/$cook[1]/;
+		s/!url!/$cook[2]/;
+		s/!str_crypt!/$str_crypt/g;
+		s/!color!/$color/g;
+		s/!sub!/$resub/g;
+		s/!reno!/$resnum/g;
+		s/!counter!//g;
+		s/!page_btn!//g;
+	}
+
+	# ヘッダ表示
+	print "Content-type: text/html; charset=shift_jis\n\n";
+	print $head;
+
+	# レス
+	my $res;
+	foreach my $r (@res) {
+		# 添付
+		$com{$r} = qq|<span style="color:$col[$col{$r}]">$com{$r}</span>|;
+		if (defined($ext{$r})) {
+			$com{$r} = att_file($r,$com{$r},$ext{$r},$imw{$r},$imh{$r});
+		}
+		# 文字置換
+		my $tmp = $resloop;
+		$tmp =~ s/!sub!/$sub{$r}/g;
+		$tmp =~ s/!name!/$nam{$r}/g;
+		$tmp =~ s/!date!/$dat{$r}/g;
+		$tmp =~ s/!url!/$url{$r}/g;
+		$tmp =~ s/!num!/$r/g;
+		$tmp =~ s|!comment!|$com{$r}|g;
+		$res .= $tmp;
+	}
+
+	# 添付
+	$com{$resnum} = qq|<span style="color:$col[$col{$resnum}]">$com{$resnum}</span>|;
+	if (defined($ext{$resnum})) {
+		$com{$resnum} = att_file($resnum,$com{$resnum},$ext{$resnum},$imw{$resnum},$imh{$resnum});
+	}
+	# 文字置換
+	$loop =~ s/!sub!/$sub{$resnum}/g;
+	$loop =~ s/!name!/$nam{$resnum}/g;
+	$loop =~ s/!date!/$dat{$resnum}/g;
+	$loop =~ s/!url!/$url{$resnum}/g;
+	$loop =~ s/!num!/$resnum/g;
+	$loop =~ s/!comment!/$com{$resnum}/g;
+	$loop =~ s/!bbs_cgi!/$cf{bbs_cgi}/g;
+	$loop =~ s|<!-- res -->|<div class="ta-r">$res</div>|g if ($res);
+	print $loop;
+
+	# フッタ
+	footer($foot);
+}
+
+#-----------------------------------------------------------
+#  ワード検索
+#-----------------------------------------------------------
+sub find_data {
+	# 条件/表示形式
+	$in{cond} =~ s/\D//g;
+	my $bbs = $in{bbs} == 1 ? 1 : 0;
+
+	# 検索条件プルダウン
+	my %op = (1 => 'AND', 0 => 'OR');
+	my $op_cond;
+	foreach (1,0) {
+		if ($in{cond} eq $_) {
+			$op_cond .= qq|<option value="$_" selected>$op{$_}\n|;
+		} else {
+			$op_cond .= qq|<option value="$_">$op{$_}\n|;
+		}
+	}
+
+	# 検索実行
+	my ($hit,@log) = search($cf{logfile}) if ($in{word} ne '');
+
+	# テンプレート
+	open(IN,"$cf{tmpldir}/find.html") or error("open err: find.html");
+	my $tmpl = join('', <IN>);
+	close(IN);
+
+	# 分割
+	my ($head,$loop,$foot) = split(/<!-- loop -->/,$tmpl);
+
+	# 文字置換え
+	for ($head, $foot) {
+		s/!bbs_cgi!/$cf{bbs_cgi}/g;
+		s/<!-- op_cond -->/$op_cond/;
+		s/!word!/$in{word}/;
+		s/!bbs!/$bbs/g;
+	}
+
+	# ヘッダ部
+	print "Content-type: text/html; charset=shift_jis\n\n";
+	print $head;
+
+	# ループ部
+	foreach my $log (@log) {
+		my ($no,$reno,$date,$name,$eml,$sub,$com,$url,$host,$pw,$col,$ext,$w,$h,$chk) = split(/<>/,$log);
+		$name = qq|<a href="mailto:$eml">$name</a>| if ($eml);
+		$com  = auto_link($com) if ($cf{auto_link});
+		$url  = qq|<a href="$url" target="_blank"><img src="$cf{ico_home}" class="icon"></a>| if ($url);
+		if ($ext) {
+			if ($cf{img_check} && $chk eq '0') {
+				$ext = "hide";
+			}
+			$com = att_file($no,$com,$ext,$w,$h);
+		}
+
+		my $tmp = $loop;
+		$tmp =~ s/!num!/$no/g;
+		$tmp =~ s/!sub!/$sub/g;
+		$tmp =~ s/!date!/$date/g;
+		$tmp =~ s/!name!/$name/g;
+		$tmp =~ s/!home!/$url/g;
+		$tmp =~ s/!comment!/$com/g;
+		print $tmp;
+	}
+
+	# フッタ
+	footer($foot);
+}
+
+#-----------------------------------------------------------
+#  検索実行
+#-----------------------------------------------------------
+sub search {
+	my ($file,$list,$stat) = @_;
+
+	# コード変換
+	if ($cf{conv_code} == 1) {
+		require './lib/Jcode.pm';
+		$in{word} = Jcode->new($in{word})->sjis;
+	}
+
+	# キーワードを配列化
+	$in{word} =~ s/　/ /g;
+	my @wd = split(/\s+/,$in{word});
+
+	# キーワード検索準備（Shift-JIS定義）
+	my $ascii = '[\x00-\x7F]';
+	my $hanka = '[\xA1-\xDF]';
+	my $kanji = '[\x81-\x9F\xE0-\xFC][\x40-\x7E\x80-\xFC]';
+
+	# 検索処理
+	my ($i,@log);
+	open(IN,"$file") or error("open err: $file");
+	my $top = <IN> if (!$stat);
+	while (<IN>) {
+		my ($no,$reno,$date,$nam,$eml,$sub,$com,$url,$hos,$pw,$col,$ext,$w,$h,$chk) = split(/<>/);
+
+		my $flg;
+		foreach my $wd (@wd) {
+			if ("$nam $eml $sub $com $url" =~ /^(?:$ascii|$hanka|$kanji)*?\Q$wd\E/i) {
+				$flg++;
+				if ($in{cond} == 0) { last; }
+			} else {
+				if ($in{cond} == 1) { $flg = 0; last; }
+			}
+		}
+		next if (!$flg);
+
+		$i++;
+		if ($list > 0) {
+			next if ($i < $in{pg} + 1);
+			next if ($i > $in{pg} + $list);
+		}
+
+		push(@log,$_);
+	}
+	close(IN);
+
+	# 検索結果
+	return ($i,@log);
+}
+
+#-----------------------------------------------------------
+#  留意事項表示
+#-----------------------------------------------------------
+sub note_page {
+	# 許可拡張子（表示用）
+	my $ext = ext_file();
+
+	open(IN,"$cf{tmpldir}/note.html") or error("open err: note.html");
+	my $tmpl = join('', <IN>);
+	close(IN);
+
+	$tmpl =~ s/!file!/$ext/g;
+	$tmpl =~ s/!maxdata!/$cf{maxdata}バイト/g;
+	$tmpl =~ s/!max_w!/$cf{max_img_w}/g;
+	$tmpl =~ s/!max_h!/$cf{max_img_h}/g;
+
+	print "Content-type: text/html; charset=shift_jis\n\n";
+	print $tmpl;
+	exit;
+}
+
+#-----------------------------------------------------------
+#  アルバム機能
+#-----------------------------------------------------------
+sub album {
+	# ページ数/表示形式
+	my $pg = $in{pg} || 0;
+	my $bbs = $in{bbs} == 1 ? 1 : 0;
+
+	# 画像サイズ再定義
+	$cf{max_img_w} = $cf{alb_img_w};
+	$cf{max_img_h} = $cf{alb_img_h};
+
+	# テンプレート認識
+	open(IN,"$cf{tmpldir}/album.html") or error("open err: album.html");
+	my $tmpl = join('', <IN>);
+	close(IN);
+
+	# テンプレート分割
+	my ($head,$loop,$foot) = split(/<!-- loop -->/,$tmpl);
+
+	# データ読み込み
+	my ($i,@img);
+	open(IN,"$cf{logfile}") or error("open err: $cf{logfile}");
+	my $top = <IN>;
+	while (<IN>) {
+		my ($no,$reno,$date,$name,$eml,$sub,$com,$url,$host,$pw,$col,$ex,$w,$h,$chk) = split(/<>/);
+		next if ($cf{img_check} && $chk eq '0');
+		next if ($ex !~ /(jpg|png|gif)$/);
+
+		$i++;
+		next if ($i < $pg + 1);
+		next if ($i > $pg + 10);
+
+		# 画像データ収集
+		push(@img,"$no\t$sub\t$ex\t$w\t$h");
+	}
+	close(IN);
+
+	# 繰越ボタン
+	my $page_btn = make_pgbtn($i,$pg,'&mode=album',$cf{max_albums});
+
+	# 文字置換
+	for ($head, $foot) {
+		s/!([a-z]+_cgi)!/$cf{$1}/g;
+		s/!page_btn!/$page_btn/g;
+		s/!bbs!/$bbs/g;
+	}
+
+	# 画面展開
+	print "Content-type: text/html; charset=shift_jis\n\n";
+	print $head;
+
+	foreach (@img) {
+		my ($no,$sub,$ex,$w,$h) = split(/\t/);
+
+		my $tmp = $loop;
+		$tmp =~ s/!image!/image($no,$ex,$w,$h)/eg;
+		$tmp =~ s/!caption!/$sub/g;
+		print $tmp;
+	}
+
+	# フッタ
+	footer($foot);
+}
+
+#-----------------------------------------------------------
+#  過去ログ画面
+#-----------------------------------------------------------
+sub past_log {
+	# 過去ログ番号
+	open(IN,"$cf{nofile}") or error("open err: $cf{nofile}");
+	my $pastnum = <IN>;
+	close(IN);
+
+	my $pastnum = sprintf("%04d", $pastnum);
+	$in{pno} =~ s/\D//g;
+	$in{pno} ||= $pastnum;
+
+	# プルダウンタグ作成
+	my $op_pno;
+	for ( my $i = $pastnum; $i > 0; $i-- ) {
+		$i = sprintf("%04d", $i);
+
+		if ($in{pno} == $i) {
+			$op_pno .= qq|<option value="$i" selected>$i\n|;
+		} else {
+			$op_pno .= qq|<option value="$i">$i\n|;
+		}
+	}
+
+	# ページ数
+	my $pg = $in{pg} || 0;
+
+	# 初期化
+	my ($hit,$page_btn,$hit,@log,%res);
+
+	# 対象ログ定義
+	my $file = "$cf{pastdir}/" . sprintf("%04d", $in{pno}) . ".cgi";
+
+	# ワード検索
+	if ($in{find} && $in{word} ne '') {
+		# 検索
+		($hit,@log) = search($file,$in{list},'past');
+
+		# 結果
+		$page_btn = "検索結果：<b>$hit</b>件 &nbsp;&nbsp;" . pgbtn_old($hit,$in{pno},$pg,$in{list},'find');
+
+	# ログ一覧
+	} else {
+		my $pg_max = $cf{max_thread} * 2;
+
+		# 過去ログオープン
+		my $i = 0;
+		open(IN,"$file") or error("open err: $file");
+		while(<IN>) {
+			my ($no,$reno,$date,$nam,$eml,$sub,$com,$url,$hos,$pw,$col,$ext,$w,$h,$chk) = split(/<>/);
+			++$i if ($reno eq '');
+			next if ($i < $pg + 1);
+			next if ($i > $pg + $pg_max);
+
+			if ($reno) {
+				$res{$reno} .= "$no<>$reno<>$date<>$nam<>$eml<>$sub<>$com<>$url<>$col\0";
+				next;
+			}
+			push(@log,$_);
+		}
+		close(IN);
+
+		# 繰越ボタン作成
+		$page_btn = pgbtn_old($i,$in{pno},$pg,$pg_max);
+	}
+
+	# プルダウン作成（検索条件）
+	my %op = make_op();
+
+	# テンプレート読み込み
+	open(IN,"$cf{tmpldir}/past.html") or error("open err: past.html");
+	my $tmpl = join('', <IN>);
+	close(IN);
+
+	open(IN,"$cf{tmpldir}/res.html") or error("open err: res.html");
+	my $restmpl = join('', <IN>);
+	close(IN);
+
+	# テンプレート分割
+	my ($head,$loop,$foot) = split(/<!-- loop -->/,$tmpl);
+
+	if ($in{change}) { $in{word} = ''; }
+
+	my @col = split(/\s+/,$cf{colors});
+
+	# 文字置換
+	for ($head, $foot) {
+		s/!past_num!/$in{pno}/g;
+		s/!bbs_url!//g;
+		s/!([a-z]+_cgi)!/$cf{$1}/g;
+		s/<!-- op_pno -->/$op_pno/g;
+		s/<!-- op_(\w+) -->/$op{$1}/g;
+		s/!word!/$in{word}/g;
+		s/!page_btn!/$page_btn/g;
+	}
+
+	# 画面表示
+	print "Content-type: text/html; charset=shift_jis\n\n";
+	print $head;
+
+	foreach (@log) {
+		my ($no,$reno,$date,$nam,$eml,$sub,$com,$url,$hos,$pw,$col,$ext,$w,$h,$chk) = split(/<>/);
+		$nam = qq|<a href="mailto:$eml">$nam</a>| if ($eml);
+		$com = auto_link($com) if ($cf{auto_link});
+		$url = qq|<a href="$url" target="_blank"><img src="$cf{ico_home}" class="icon"></a>| if ($url);
+
+		# レス
+		my $res;
+		foreach my $log ( split(/\0/,$res{$no}) ) {
+			my ($no,$reno,$date,$nam,$eml,$sub,$com,$url,$col) = split(/<>/, $log);
+			$nam = qq|<a href="mailto:$eml">$nam</a>| if ($eml);
+			$com = auto_link($com) if ($cf{auto_link});
+			$url = qq|<a href="$url" target="_blank"><img src="$cf{ico_home}" class="icon"></a>| if ($url);
+
+			my $tmp = $restmpl;
+			$tmp =~ s/!sub!/$sub/g;
+			$tmp =~ s/!name!/$nam/g;
+			$tmp =~ s/!date!/$date/g;
+			$tmp =~ s/!url!/$url/g;
+			$tmp =~ s/!num!/$no/g;
+			$tmp =~ s/!comment!/<span style="color:$col[$col]">$com<\/span>/g;
+			$res .= $tmp;
+		}
+
+		my $tmp = $loop;
+		$tmp =~ s/!num!/$no/g;
+		$tmp =~ s/!sub!/$sub/g;
+		$tmp =~ s/!date!/$date/g;
+		$tmp =~ s/!name!/$nam/g;
+		$tmp =~ s/!url!/$url/g;
+		$tmp =~ s/!comment!/$com/g;
+		$tmp =~ s/<!-- res -->/<blockquote>$res<\/blockquote>/g if ($res);
+
+		print $tmp;
+	}
+
+	# フッタ
+	footer($foot);
+}
+
+#-----------------------------------------------------------
+#  トピックス画面
+#-----------------------------------------------------------
+sub bbs_topic {
+	# クッキー取得
+	my @cook = get_cookie();
+	$cook[2] ||= 'http://';
+
+	# 色選択ボタン
+	my @col = split(/\s+/,$cf{colors});
+	my $color;
+	foreach (0 .. $#col) {
+		if ($_ == $cook[3]) {
+			$color .= qq|<input type="radio" name="color" value="$_" checked>|;
+		} else {
+			$color .= qq|<input type="radio" name="color" value="$_">|;
+		}
+		$color .= qq|<span style="color:$col[$_]">■</span>\n|;
+	}
+
+	# カウンタ
+	my $counter = bbs_count() if ($cf{counter});
+
+	# ページ数
+	my $pg = $in{pg} || 0;
+
+	# データ認識
+	my ($i,@log,%res,%last);
+	open(IN,"$cf{logfile}") or error("open err: $cf{logfile}");
+	while(<IN>) {
+		my ($no,$reno,$date,$name,$eml,$sub,$com,$url,$host,$pw,$col,$ext,$w,$h,$chk) = split(/<>/);
+
+		if (!$reno) { $i++; }
+		next if ($i < $pg + 1);
+		next if ($i > $pg + $cf{max_topics});
+
+		if ($reno) { $res{$reno}++; $last{$reno} = "$date<br>$name"; }
+		else { $last{$no} = "$date<br>$name"; }
+
+		push(@log,$_) if (!$reno);
+	}
+	close(IN);
+
+	# 繰越ボタン作成
+	my $pg_btn = make_pgbtn($i,$pg,'&bbs=1',$cf{max_topics});
+
+	# テンプレート読み込み
+	open(IN,"$cf{tmpldir}/topic.html") or error("open err: topic.html");
+	my $tmpl = join('', <IN>);
+	close(IN);
+
+	# 画像認証作成
+	my ($str_plain,$str_crypt);
+	if ($cf{use_captcha} > 0) {
+		require $cf{captcha_pl};
+		($str_plain,$str_crypt) = cap::make($cf{captcha_key},$cf{cap_len});
+	} else {
+		$tmpl =~ s/<!-- captcha -->.+<!-- captcha -->//s;
+	}
+
+	# 文字置換え
+	$tmpl =~ s/<!-- past -->.+<!-- past -->//s if ($cf{pastkey} == 0);
+	$tmpl =~ s/!bbs_title!/$cf{bbs_title}/g;
+	$tmpl =~ s/!([a-z]+_cgi)!/$cf{$1}/g;
+	$tmpl =~ s/!page_btn!/$pg_btn/g;
+	$tmpl =~ s/!homepage!/$cf{homepage}/g;
+	$tmpl =~ s/!counter!/$counter/g;
+	$tmpl =~ s/!color!/$color/g;
+	$tmpl =~ s/!sub!//g;
+	$tmpl =~ s/!name!/$cook[0]/;
+	$tmpl =~ s/!email!/$cook[1]/;
+	$tmpl =~ s/!url!/$cook[2]/;
+	$tmpl =~ s/!str_crypt!/$str_crypt/g;
+	$tmpl =~ s/\?mode=(album|find)/?mode=$1&bbs=1/g;
+
+	# 分解
+	my ($head,$loop,$foot) = split(/<!-- loop -->/,$tmpl);
+
+	# ヘッダ表示
+	print "Content-type: text/html; charset=shift_jis\n\n";
+	print $head;
+
+	# 親記事展開
+	foreach (@log) {
+		my ($no,$reno,$date,$name,$eml,$sub,$com,$url,$host,$pw,$col,$ext,$w,$h,$chk) = split(/<>/);
+
+		if ($res{$no} eq '') { $res{$no} = 0; }
+
+		my $tmp = $loop;
+		$tmp =~ s/!topi-num!/$no/g;
+		$tmp =~ s|!topi-ttl!|<a href="$cf{bbs_cgi}?read=$no">$sub</a>|g;
+		$tmp =~ s/!topi-nam!/$name/g;
+		$tmp =~ s/!topi-res!/$res{$no}/g;
+		$tmp =~ s/!topi-last!/$last{$no}/g;
+		print $tmp;
+	}
+
+	# フッタ
+	footer($foot);
+}
+
+#-----------------------------------------------------------
+#  URLエンコード
+#-----------------------------------------------------------
+sub url_enc {
+	local($_) = @_;
+
+	s/(\W)/'%' . unpack('H2', $1)/eg;
+	s/\s/+/g;
+	$_;
+}
+
+#-----------------------------------------------------------
+#  繰越ボタン作成 [ 過去ログ ]
+#-----------------------------------------------------------
+sub pgbtn_old {
+	my ($i,$pno,$pg,$list,$stat) = @_;
+
+	# ページ繰越定義
+	my $next = $pg + $list;
+	my $back = $pg - $list;
+
+	my $link;
+	if ($stat eq 'find') {
+		my $wd = url_enc($in{word});
+		$link = "$cf{bbs_cgi}?mode=$in{mode}&pno=$pno&find=1&word=$wd&list=$list";
+	} else {
+		$link = "$cf{bbs_cgi}?mode=$in{mode}&pno=$pno";
+	}
+
+	# ページ繰越ボタン作成
+	my $pg_btn;
+	if ($back >= 0 || $next < $i) {
+		$pg_btn .= "Page: ";
+
+		my ($x, $y) = (1, 0);
+		while ($i > 0) {
+			if ($pg == $y) {
+				$pg_btn .= qq(| <b>$x</b> );
+			} else {
+				$pg_btn .= qq(| <a href="$link&pg=$y">$x</a> );
+			}
+			$x++;
+			$y += $list;
+			$i -= $list;
+		}
+		$pg_btn .= "|";
+	}
+	return $pg_btn;
+}
+
+#-----------------------------------------------------------
+#  プルダウン作成 [ 検索条件 ]
+#-----------------------------------------------------------
+sub make_op {
+	my %op;
+	my %cond = (1 => 'AND', 0 => 'OR');
+	foreach (1,0) {
+		if ($in{cond} eq $_) {
+			$op{cond} .= qq|<option value="$_" selected>$cond{$_}\n|;
+		} else {
+			$op{cond} .= qq|<option value="$_">$cond{$_}\n|;
+		}
+	}
+	for ( my $i = 10; $i <= 30; $i += 5 ) {
+		if ($in{list} == $i) {
+			$op{list} .= qq|<option value="$i" selected>$i件\n|;
+		} else {
+			$op{list} .= qq|<option value="$i">$i件\n|;
+		}
+	}
+	return %op;
+}
+
+#-----------------------------------------------------------
+#  カウンタ処理
+#-----------------------------------------------------------
+sub bbs_count {
+	# IP取得
+	my $addr = $ENV{REMOTE_ADDR};
+
+	# 閲覧時のみカウントアップ
+	my $cntup = $in{mode} eq '' ? 1 : 0;
+
+	# カウントファイルを読みこみ
+	open(LOG,"+< $cf{cntfile}") or error("open err: $cf{cntfile}");
+	eval "flock(LOG, 2);";
+	my $count = <LOG>;
+
+	# IPチェックとログ破損チェック
+	my ($cnt,$ip) = split(/:/, $count);
+	if ($addr eq $ip || $cnt eq "") { $cntup = 0; }
+
+	# カウントアップ
+	if ($cntup) {
+		$cnt++;
+		seek(LOG, 0, 0);
+		print LOG "$cnt:$addr";
+		truncate(LOG, tell(LOG));
+	}
+	close(LOG);
+
+	# 桁数調整
+	while(length($cnt) < $cf{mini_fig}) { $cnt = '0' . $cnt; }
+	my @cnts = split(//, $cnt);
+
+	# GIFカウンタ表示
+	my $counter;
+	if ($cf{counter} == 2) {
+		foreach (0 .. $#cnts) {
+			$counter .= qq|<img src="$cf{gif_path}/$cnts[$_].gif" alt="$cnts[$_]">|;
+		}
+
+	# テキストカウンタ表示
+	} else {
+		$counter = qq|<span style="color:$cf{cntcol};font-family:Verdana,Helvetica,Arial">$cnt</span>\n|;
+	}
+	return $counter;
+}
+
+#-----------------------------------------------------------
+#  自動リンク
+#-----------------------------------------------------------
+sub auto_link {
+	my $text = shift;
+
+	$text =~ s/(s?https?:\/\/([\w-.!~*'();\/?:\@=+\$,%#]|&amp;)+)/<a href="$1" target="_blank">$1<\/a>/g;
+	return $text;
+}
+
+#-----------------------------------------------------------
+#  フッター
+#-----------------------------------------------------------
+sub footer {
+	my $foot = shift;
+
+	# 著作権表記（削除・改変禁止）
+	my $copy = <<EOM;
+<p style="margin-top:2.5em;text-align:center;font-family:Verdana,Helvetica,Arial;font-size:10px;">
+- <a href="http://www.kent-web.com/" target="_top">Joyful Note</a> -
+</p>
+EOM
+
+	if ($foot =~ /(.+)(<\/body[^>]*>.*)/si) {
+		print "$1$copy$2\n";
+	} else {
+		print "$foot$copy\n";
+		print "</body></html>\n";
+	}
+	exit;
+}
+
+#-----------------------------------------------------------
+#  繰越ボタン作成
+#-----------------------------------------------------------
+sub make_pgbtn {
+	my ($i,$pg,$stat,$max) = @_;
+	$max ||= 5;
+
+	# ページ繰越定義
+	my $next = $pg + $max;
+	my $back = $pg - $max;
+
+	# ページ繰越ボタン作成
+	my @pg;
+	if ($back >= 0 || $next < $i) {
+		my $flg;
+		my ($w,$x,$y,$z) = (0,1,0,$i);
+		while ($z > 0) {
+			if ($pg == $y) {
+				$flg++;
+				push(@pg,qq!<li><span>$x</span></li>!);
+			} else {
+				push(@pg,qq!<li><a href="$cf{bbs_cgi}?pg=$y$stat">$x</a></li>!);
+			}
+			$x++;
+			$y += $max;
+			$z -= $max;
+
+			if ($flg) { $w++; }
+			last if ($w >= 5 && @pg >= 10);
+		}
+	}
+	while( @pg >= 11 ) { shift(@pg); }
+	my $ret = join('', @pg);
+	if ($back >= 0) {
+		$ret = qq!<li><a href="$cf{bbs_cgi}?pg=$back$stat">&laquo;</a></li>\n! . $ret;
+	}
+	if ($next < $i) {
+		$ret .= qq!<li><a href="$cf{bbs_cgi}?pg=$next$stat">&raquo;</a></li>\n!;
+	}
+	
+	# 結果を返す
+	return $ret ? qq|<ul class="pager">$ret</ul>| : '';
+}
+
+#-----------------------------------------------------------
+#  クッキー取得
+#-----------------------------------------------------------
+sub get_cookie {
+	# クッキー取得
+	my $cook = $ENV{HTTP_COOKIE};
+
+	# 該当IDを取り出す
+	my %cook;
+	foreach ( split(/;/, $cook) ) {
+		my ($key,$val) = split(/=/);
+		$key =~ s/\s//g;
+		$cook{$key} = $val;
+	}
+
+	# URLデコード
+	my @cook;
+	foreach ( split(/<>/,$cook{$cf{cookie_id}}) ) {
+		s/%([0-9A-Fa-f][0-9A-Fa-f])/pack("H2", $1)/eg;
+		s/[&"'<>]//g;
+
+		push(@cook,$_);
+	}
+	return @cook;
+}
+
+#-----------------------------------------------------------
+#  添付リンク
+#-----------------------------------------------------------
+sub att_file {
+	my ($no,$com,$ex,$w,$h) = @_;
+
+	# 未公開
+	if ($ex eq 'hide') {
+		$com .= qq|<p>[添付]: 認証待ち</p>|;
+
+	# 画像のとき
+	} elsif ($ex =~ /(jpg|png|gif)$/) {
+
+		my $op;
+		if (-f "$cf{imgdir}/$no-s$ex") {
+			$op = qq|src="$cf{imgurl}/$no-s$ex"|;
+		} else {
+			($w,$h) = resize($w,$h);
+			$op = qq|src="$cf{imgurl}/$no$ex" width="$w" height="$h"|;
+		}
+
+		# 画像はコメントの下
+		if ($cf{image_position} == 1) {
+			$com .= qq|<p><a href="$cf{imgurl}/$no$ex" target="_blank"><img $op border="0"></a></p>|;
+		# 画像はコメントの左（廻り込み）
+		} else {
+			$com = qq|<a href="$cf{imgurl}/$no$ex" target="_blank"><img $op border="0" align="left"></a>$com<br clear="all">|;
+		}
+
+	# 画像以外のとき
+	} else {
+		my $size = -s "$cf{imgdir}/$no$ex" || 0;
+		$com .= qq|<p>[<a href="$cf{imgurl}/$no$ex" target="_blank">添付</a>]: $size bytes</p>|;
+	}
+
+	return $com;
+}
+
+#-----------------------------------------------------------
+#  取り扱いファイル
+#-----------------------------------------------------------
+sub ext_file {
+	my $ext;
+	foreach ( keys %cf ) {
+		next if ($_ !~ /^ok_(\w+)/);
+		my $file = $1;
+		next if (!$cf{$_});
+
+		$file =~ tr/a-z/A-Z/;
+		$ext .= "$file, ";
+	}
+	$ext =~ s/, $//;
+
+	return $ext;
+}
+
+#-----------------------------------------------------------
+#  画像表示
+#-----------------------------------------------------------
+sub image {
+	my ($no,$ex,$w,$h) = @_;
+
+	my $image;
+	if (-f "$cf{imgdir}/$no-s$ex") {
+		$image = qq|<img src="$cf{imgurl}/$no-s$ex" border="0">|;
+
+	} else {
+		($w,$h) = resize($w,$h);
+		$image = qq|<img src="$cf{imgurl}/$no$ex" width="$w" height="$h" border="0">|;
+	}
+	return qq|<a href="$cf{imgurl}/$no$ex" target="_blank">$image</a>\n|;
+}
+

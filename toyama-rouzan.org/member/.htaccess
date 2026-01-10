@@ -1,0 +1,9 @@
+AuthUserFile /var/www/vhosts/w872.jpnsv.net/toyama-rouzan.org/member/pwmgr/.htpasswd
+AuthGroupFile /dev/null
+AuthName "‰ïˆõê—pƒGƒŠƒA‚Å‚·"
+AuthType Basic
+<Limit POST GET>
+require valid-user
+</Limit>
+Header add Pragma "no-cache"
+Header set Cache-Control no-cache
