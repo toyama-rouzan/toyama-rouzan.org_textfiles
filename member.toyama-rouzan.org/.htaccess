@@ -2,13 +2,14 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# HTTP/1.0 かつ User-Agent 空のアクセスを拒否
-RewriteCond %{SERVER_PROTOCOL} ^HTTP/1\.0$
+# --- Bot 対策（空のエージェントを拒否） ---
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
 RewriteCond %{HTTP_USER_AGENT} ^$
 RewriteRule .* - [F]
 </IfModule>
 # --- Bot 対策ここまで ---
-
 
 # BEGIN WordPress
 # "BEGIN WordPress" から "END WordPress" までのディレクティブ (行) は

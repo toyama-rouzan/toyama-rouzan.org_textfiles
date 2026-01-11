@@ -15,11 +15,10 @@
 #==== SITEGUARD_DISABLE_XMLRPC_SETTINGS_END
 #SITEGUARD_PLUGIN_SETTINGS_END
 
-# --- Bot 対策（HTTP/1.0 + User-Agent 空） ---
+# --- Bot 対策（空のエージェントを拒否） ---
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-RewriteCond %{SERVER_PROTOCOL} ^HTTP/1\.0$
 RewriteCond %{HTTP_USER_AGENT} ^$
 RewriteRule .* - [F]
 </IfModule>
