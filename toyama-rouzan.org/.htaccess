@@ -7,8 +7,7 @@ RewriteBase /
 
 # --- Bot 対策（安全で副作用が少ないもの） ---
 
-# HTTP/1.0 を拒否
-RewriteCond %{SERVER_PROTOCOL} ^HTTP/1\.0$
+# 空のエージェントを拒否
 RewriteCond %{HTTP_USER_AGENT} ^$
 RewriteRule .* - [F]
 

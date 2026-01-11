@@ -15,6 +15,18 @@
 #==== SITEGUARD_DISABLE_XMLRPC_SETTINGS_END
 #SITEGUARD_PLUGIN_SETTINGS_END
 
+
+# --- Bot 対策 WebShell 名パターン拒否 ---
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# .php / .php7 で、Bot がよく使うファイル名パターンを拒否
+RewriteCond %{REQUEST_URI} /([^/]+)\.(php|php7)$ [NC]
+RewriteCond %1 ^(shell|wso|bolt|baxa|av|buy|num|as|elp|wp-help)$ [NC]
+RewriteRule .* - [F]
+</IfModule>
+# --- ここまで ---
+
 # BEGIN WordPress
 # "BEGIN WordPress" から "END WordPress" までのディレクティブ (行) は
 # 動的に生成され、WordPress フィルターによってのみ修正が可能です。
