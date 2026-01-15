@@ -1,5 +1,16 @@
-# This file was updated by Duplicator on 2025-11-17 06:30:10.
-# See the original_files_ folder for the original source_site_htaccess file.
+# --- Bot 対策（HTTP/1.0 + UA空） ---
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# --- Bot 対策（空のエージェントを拒否） ---
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+RewriteCond %{HTTP_USER_AGENT} ^$
+RewriteRule .* - [F]
+</IfModule>
+# --- Bot 対策ここまで ---
+
 
 #SITEGUARD_PLUGIN_SETTINGS_START
 #==== SITEGUARD_DISABLE_XMLRPC_SETTINGS_START
@@ -14,15 +25,6 @@
 </Files>
 #==== SITEGUARD_DISABLE_XMLRPC_SETTINGS_END
 #SITEGUARD_PLUGIN_SETTINGS_END
-
-# --- Bot 対策（空のエージェントを拒否） ---
-<IfModule mod_rewrite.c>
-RewriteEngine On
-
-RewriteCond %{HTTP_USER_AGENT} ^$
-RewriteRule .* - [F]
-</IfModule>
-# --- Bot 対策ここまで ---
 
 # BEGIN WordPress
 # "BEGIN WordPress" から "END WordPress" までのディレクティブ (行) は
